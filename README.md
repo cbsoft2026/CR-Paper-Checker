@@ -13,6 +13,16 @@ The script assumes you have access to `docker-compose` or an alternative contain
 
 Run the script by running `docker compose up` in the `checker` directory.
 
+### Testing
+
+Run the tests associated with the checker script by running `docker compose up` in the `checker/tests` directory.
+
+If you intend to use the return code of the tests as part of an automated pipeline CI/CD pipeline, consider running the test container as follows:
+
+```(bash)
+docker compose up --exit-code-from tester
+```
+
 #### Debugging
 
 When debugging, consider running a shell inside the checker container. To do so, make sure the `stdin_open:true` option in the `checker/compose.yaml` file is uncommented, and comment the `comand` line:
@@ -28,3 +38,5 @@ After running `docker compose up`, the main script will not run automatically. I
 ```(bash)
 docker exec -it template_checker-checker-1  /bin/bash
 ```
+
+The same debugging techique applies to the `tester` container.

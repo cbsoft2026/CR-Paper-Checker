@@ -1,0 +1,14 @@
+services:
+  tester:
+    build:
+      context: ..
+      dockerfile: tests/Containerfile.tests
+    environment:
+      DATA_DIR: "/data"
+    user: "${UID}:${GID}"
+    volumes:
+      - ../../test_data/:/data:z
+      - ../src/:/src:z
+      - ./cases/:/tests:z
+    #stdin_open: true
+    command: ["pytest"]
