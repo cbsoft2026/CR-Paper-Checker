@@ -1,6 +1,9 @@
+"""
+Basic sanity checks on testing infra.
+"""
+
 import sys
 from pathlib import Path
-import pytest
 
 sys.path.append(str(Path(__file__).absolute().parent.parent))
 
