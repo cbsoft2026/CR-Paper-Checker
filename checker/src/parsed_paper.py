@@ -1,8 +1,16 @@
 """
-Module defining the ParsedPaper class.
+Module defining the ParsedPaper class and the associated PaperParsingException class.
 """
 
+import sys
+from pathlib import Path
+
+sys.path.append(str(Path(__file__).absolute().parent.parent))
+
+from enum import Enum
 from pypdf import PdfReader
+
+from src.locale_keywords import LANGUAGES
 
 class ParsedPaper():
     """
@@ -39,7 +47,31 @@ class ParsedPaper():
 
         new_parsed_paper.pages = pages
 
+        new_parsed_paper.language = new_parsed_paper._detect_language()
+
         return new_parsed_paper
+
+    def _detect_language(self) -> Enum | None:
+        """
+        Detects the language the paper is written in based on the language 
+        of its 'References' keyword.
+
+        This heuristic assumes that every paper has an unnumbered 'References'
+        secion present in the paper's outline.
+
+        If no language is detected, returns None.
+        """
+        for language in LANGUAGES:
+            for outline_item in self.get_outline():
+                if language.REFERENCES.value == str(outline_item).upper():
+                    return language
+    
+        
+    def get_language(self) -> Enum | None:
+        """
+        Returns the language used in the paper's keywords.
+        """
+        return self.language
 
     def get_num_pages(self) -> int:
         """

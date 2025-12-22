@@ -11,13 +11,16 @@ from src.parsed_paper import ParsedPaper
 
 WORD_MOCK_PATH = "/data/acm-interim.pdf"
 LATEX_MOCK_PATH = "/data/mock1.pdf"
+EN_MOCK_PATH = "/data/mock2.pdf"
+PTBR_MOCK_PATH = "/data/mock1_ptbr.pdf"
 
 def test_class_exists():
     instance = ParsedPaper()
     assert True
 
 def test_parsed_pdf_basic_info():
-    word_mock = ParsedPaper.from_pdf(WORD_MOCK_PATH)
+
+    word_mock = ParsedPaper.from_pdf(WORD_MOCK_PATH)    
     latex_mock = ParsedPaper.from_pdf(LATEX_MOCK_PATH)
 
     assert isinstance(word_mock,ParsedPaper)
@@ -39,3 +42,14 @@ def test_parsed_pdf_basic_info():
     assert len(latex_mock.get_all_pages()) == 5
     assert len(latex_mock.get_all_pages()[4]) == 156
     assert len(latex_mock.get_all_pages()[4][0]) == 3
+
+def test_language_detection():
+    
+    en_mock = ParsedPaper.from_pdf(EN_MOCK_PATH)
+    assert en_mock.get_language().LANG_CODE.value == "EN"
+
+    ptbr_mock = ParsedPaper.from_pdf(PTBR_MOCK_PATH)
+    assert ptbr_mock.get_language().LANG_CODE.value == "PT_BR"
+
+    failing_mock = ParsedPaper.from_pdf(WORD_MOCK_PATH)
+    assert failing_mock.get_language() is None

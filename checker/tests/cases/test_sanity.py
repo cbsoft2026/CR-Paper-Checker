@@ -7,7 +7,7 @@ from pathlib import Path
 
 sys.path.append(str(Path(__file__).absolute().parent.parent))
 
-from src.main import main
+from src.parsed_paper import ParsedPaper
 
 def test_infra_works():
     assert True
