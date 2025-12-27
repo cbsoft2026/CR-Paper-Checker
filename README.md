@@ -9,6 +9,8 @@ Tooling made to ease the manual validation of the camera ready papers accepted a
 
 The script assumes you have access to `docker-compose` or an alternative container orchestration framework (such as `podman`). 
 
+Additionally, the tester requires the TrueType font archives for the fonts checked in the template. These must be placed inside the `data/fonts/` dir. See the `test_data` dir for an example.
+
 ### Running
 
 Run the script by running `docker compose up` in the `checker` directory.
