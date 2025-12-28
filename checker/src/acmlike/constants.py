@@ -2,9 +2,11 @@
 Houses teh definition of constants specific to the ACMlike template checker.
 """
 
-#MAIN_FONT = ""
+#MAIN_FONT = "LinLibertineT"
 PAGE_HEADER_FONT = "LinBiolinumT"
-#SECTION_TITLE_FONT = ""
+AUTHOR_BLOCK_FONT = "LinLibertineT"
+PAPER_ABSTRACT_FONT = "LinLibertineTB"
+#SECTION_TITLE_FONT = "LinLibertineTB"
 #TABLE_CAPTION_FONT = "LinLibertineTB"
 
 FONT_DATA_DIR = "/data/fonts/"

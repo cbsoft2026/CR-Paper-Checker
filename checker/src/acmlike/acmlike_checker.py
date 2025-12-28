@@ -10,7 +10,8 @@ from PIL import ImageFont
 sys.path.append(str(Path(__file__).absolute().parent.parent.parent))
 
 from src.parsed_paper import ParsedPaper
-from src.acmlike.constants import PAGE_HEADER_FONT, DEFAULT_CONF_HEADER, FONT_DATA_DIR
+from src.acmlike.constants import PAGE_HEADER_FONT, DEFAULT_CONF_HEADER, \
+    FONT_DATA_DIR, AUTHOR_BLOCK_FONT, PAPER_ABSTRACT_FONT
 
 class ACMLikeChecker():
     """
@@ -39,9 +40,7 @@ class ACMLikeChecker():
             check_results["references_section"] = True
         
         check_results = check_results | self._check_no_ACM_elements(paper)
-
-        # TODO: Parse authors from title page.
-
+        check_results = check_results | self._check_author_blocks(paper)
         check_results = check_results | self._check_page_headers(paper)
 
         ## Check if metadata title matches first page title?
@@ -79,6 +78,40 @@ class ACMLikeChecker():
         Checks whether a paper was compiled with the acmlike template.
         """
         return {}
+
+    def _check_author_blocks(self, paper: ParsedPaper) -> dict:
+        """
+        Checks whether the paper's authors are split into separate blocks,
+        each with the author's email address.
+
+        TODO: Also parse and save authors from title page into Paper object.
+        """
+
+        partial_results = {
+            "author_blocks" : True,
+            "author_emails" : True,
+        }
+
+        first_page = paper.get_all_pages()[0]
+
+        authors_extracted = extract_authors_from_page_lines(first_page)
+        
+        if len(authors_extracted) == 0:
+            partial_results["author_blocks"] = False
+            partial_results["author_emails"] = False
+        else:
+            for author_dict in authors_extracted:
+                if ',' in author_dict["name"]:
+                    partial_results["author_blocks"] = False
+                
+                found_email = False
+                for info_line in author_dict["info"]:
+                    if re.match(r'[^@]+@[^@]+\.[^@]',info_line) is not None:
+                        found_email = True
+                if not found_email:
+                    partial_results["author_emails"] = False
+
+        return partial_results
 
     def _check_page_headers(self, paper: ParsedPaper) -> dict:
         """
@@ -142,6 +175,58 @@ class ACMLikeChecker():
         Checks whether all keywords in a paper are in the same language.
         """
         return {}
+
+def extract_authors_from_page_lines(page_lines: list[tuple[str,dict,float]]) -> list[dict]:
+    """
+    Given a list of tuples corresponding to lines of a page, collects author info.
+    For each author, a dict is created containing two keys: name, and info.
+
+    Based on the following heuristic:
+    Author information in a ACM-like paper is parsed in the following format: 
+    
+    Paper Title [on LinLibertineTB]
+        {for every author} [all on LinLibertineT]
+        \n 
+        Author Name
+        \n
+        Author Affiliation
+        Author City/Country
+        Author email
+    ABSTRACT [on LinLibertineTB]
+    """
+
+    authors_read = []
+    line_index = 2 # Jump first (empty) line and (maybe) paper title
+    while line_index < len(page_lines):
+        this_line = page_lines[line_index]
+        line_text = this_line[0]
+        font_family = this_line[1]["/BaseFont"][8:]
+
+        if font_family == AUTHOR_BLOCK_FONT:
+            if line_text == "\n":
+                line_index +=1
+                continue
+            next_line = page_lines[line_index]
+            if font_family != AUTHOR_BLOCK_FONT:
+                break
+            authors_read.append({
+                "name" : next_line[0],
+                "info" : []
+            })
+
+            line_index = line_index + 2 # Skipping newline here
+            while page_lines[line_index][0] != "\n":
+                authors_read[-1]["info"].append(page_lines[line_index][0])
+                line_index += 1
+            line_index -= 1
+            
+        elif len(authors_read) > 0:
+            # In this case, I have read an author block and now it has come to an end
+            break
+            
+        line_index += 1
+
+    return authors_read
 
 def get_page_header_lines(paper: ParsedPaper, page_index: int) -> tuple[list[str],float]:
     """

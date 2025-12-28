@@ -17,7 +17,8 @@ ACM_CCS_CONCEPTS_MOCK_PATH = "/data/acm_ccs_concepts.pdf"
 WRONG_CONF_MOCK_PATH = "/data/mock2.pdf"
 LONG_AUTHOR_HEADER = "/data/long_author_header.pdf"
 LONG_TITLE_HEADER = "/data/long_title_header.pdf"
-
+INVALID_AUTHOR_BLOCKS = "/data/acm_invalid_auth_block.pdf"
+INVALID_AUTHOR_EMAIL = "/data/acm_missing_email.pdf"
 
 def test_acm_ref_format(): 
 
@@ -92,3 +93,27 @@ def test_acm_long_shorauthors_header():
 
     assert not long_authors_results["short_authors_header"]
     assert ok_authors_results["short_authors_header"]
+   
+def test_acm_invalid_author_blocks():
+    invalid_author_blocks = ParsedPaper.from_pdf(INVALID_AUTHOR_BLOCKS)
+    ok_author_blocks = ParsedPaper.from_pdf(ACM_FOOTNOTE_MOCK_PATH)
+
+    checker = ACMLikeChecker()
+
+    invalid_block_results = checker.check_paper(invalid_author_blocks)
+    ok_results = checker.check_paper(ok_author_blocks)
+
+    assert not invalid_block_results["author_blocks"] 
+    assert ok_results["author_blocks"] 
+
+def test_acm_author_email():
+    invalid_author_email = ParsedPaper.from_pdf(INVALID_AUTHOR_EMAIL)
+    ok_author_email = ParsedPaper.from_pdf(ACM_CCS_CONCEPTS_MOCK_PATH)
+
+    checker = ACMLikeChecker()
+
+    invalid_email_results = checker.check_paper(invalid_author_email)
+    ok_results = checker.check_paper(ok_author_email)
+
+    assert not invalid_email_results["author_emails"] 
+    assert ok_results["author_emails"] 
