@@ -10,7 +10,9 @@ class Keywords_PT_BR(Enum):
     ABSTRACT = "RESUMO"
     KEYWORDS = "PALAVRAS-CHAVE"
     ARTIFACTS = "DISPONIBILIDADE DE ARTEFATO"
+    WRONG_ARTIFACTS = ("DISPONIBILIDADE DE ARTEFATOS", "Disponibilidade de Artefato")
     ACKS = "AGRADECIMENTOS"
+    WRONG_ACKS = ("AGRADECIMENTO", "Agradecimentos", "Agradecimento")
 
 class Keywords_EN(Enum):
     LANG_CODE = "EN"
@@ -18,6 +20,8 @@ class Keywords_EN(Enum):
     ABSTRACT = "ABSTRACT"
     KEYWORDS = "KEYWORDS"
     ARTIFACTS = "ARTIFACT AVAILABILITY"
+    WRONG_ARTIFACTS = ("ARTIFACTS AVAILABILITY", "Artifact Availability")
     ACKS = "ACKNOWLEDGMENTS"
+    WRONG_ACKS = ("ACKNOWLEDGMENT", "Acknowledgments", "Acknowledgment")
 
 LANGUAGES = [Keywords_EN, Keywords_PT_BR]  

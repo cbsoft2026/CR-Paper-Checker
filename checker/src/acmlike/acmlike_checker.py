@@ -11,7 +11,7 @@ sys.path.append(str(Path(__file__).absolute().parent.parent.parent))
 
 from src.parsed_paper import ParsedPaper
 from src.acmlike.constants import PAGE_HEADER_FONT, DEFAULT_CONF_HEADER, \
-    FONT_DATA_DIR, AUTHOR_BLOCK_FONT, PAPER_ABSTRACT_FONT
+    FONT_DATA_DIR, AUTHOR_BLOCK_FONT, SECTION_TITLE_FONT, COLUMN_SIZE, SUBSECTION_FONT_SIZE
 
 class ACMLikeChecker():
     """
@@ -31,6 +31,10 @@ class ACMLikeChecker():
         with this Template Checker. 
         """
 
+        paper.outline = extract_acm_paper_outline(paper)
+        if paper.get_language() is None:
+            paper.update_language_from_outline(paper.get_outline())
+
         check_results = {} # For now, saves testing results in a dict structure.
 
         if paper.get_language() is None:
@@ -42,7 +46,8 @@ class ACMLikeChecker():
         check_results = check_results | self._check_no_ACM_elements(paper)
         check_results = check_results | self._check_author_blocks(paper)
         check_results = check_results | self._check_page_headers(paper)
-
+        check_results = check_results | self._check_paper_outline(paper)
+        check_results = check_results | self._check_one_paragraph_abstract(paper)
         ## Check if metadata title matches first page title?
         
         return check_results
@@ -155,13 +160,13 @@ class ACMLikeChecker():
 
         authors_ok = True
         for line in even_header_lines:
-            if is_line_too_long(line,PAGE_HEADER_FONT,header_font_size,220):
+            if compute_line_length(line,PAGE_HEADER_FONT,header_font_size) > COLUMN_SIZE:
                 authors_ok = False
                 break
 
         title_ok = True
         for line in odd_header_lines:
-            if is_line_too_long(line,PAGE_HEADER_FONT,header_font_size,220):
+            if compute_line_length(line,PAGE_HEADER_FONT,header_font_size) > COLUMN_SIZE:
                 title_ok = False
                 break
         
@@ -170,11 +175,101 @@ class ACMLikeChecker():
 
         return header_results
 
-    def _check_keyword_lang_consistency(self, paper: ParsedPaper) -> dict:
+    def _check_paper_outline(self,paper: ParsedPaper) -> dict:
         """
-        Checks whether all keywords in a paper are in the same language.
+        Checks if the paper outline respects section name formatting and contains
+        the sections in the correct order.
         """
-        return {}
+
+        outline_results = {
+            "numbered_sections_lowercase": True,
+            "correct_artifact_section" : False,
+            "correctly_named_abstract" : False,
+            "correctly_named_keywords": False,
+            "artifact_sec_pos": False,
+            "correct_acks_title": True 
+        }
+
+        outline_titles,_ = paper.get_outline() 
+        paper_language = paper.get_language()
+        acks_index = -1
+        arifact_index = -1
+
+        if paper_language is None:
+            return outline_results
+        
+        for item_index in range(len(outline_titles)):
+            item = outline_titles[item_index]
+            first_char = item[0]
+            try:
+                _ = int(first_char)
+                # In this case, we're in a numbered section
+                word_by_word = item.split(' ')
+                not_numbered = ' '.join(word_by_word[1:])
+                if not_numbered == not_numbered.upper():
+                    outline_results["numbered_sections_lowercase"] = False
+
+                if not_numbered == paper_language.ACKS.value or \
+                    not_numbered in paper_language.WRONG_ACKS.value: 
+
+                    outline_results["correct_acks_title"] = False
+                    acks_index = item_index
+                elif not_numbered == paper_language.ARTIFACTS.value or \
+                    not_numbered in paper_language.WRONG_ARTIFACTS.value:
+
+                    arifact_index = item_index
+            except:
+                if acks_index == -1 and item == paper_language.ACKS.value:
+                    acks_index = item_index
+                elif acks_index == -1 and item in paper_language.WRONG_ACKS.value:
+                    outline_results["correct_acks_title"] = False
+                    acks_index = item_index
+                elif arifact_index == -1 and item == paper_language.ARTIFACTS.value:
+                    outline_results["correct_artifact_section"] = True
+                    arifact_index = item_index
+                elif arifact_index == -1 and item in paper_language.WRONG_ARTIFACTS.value:
+                    arifact_index = item_index
+        
+        if arifact_index > -1:
+            if acks_index > -1:
+                if acks_index != arifact_index + 1: # Artifact must precede acks
+                    outline_results["artifact_sec_pos"] = False
+                else:
+                    # And acks must precede refs
+                    acks_followed_by_refs = outline_titles[acks_index+1] == paper_language.REFERENCES.value
+                    outline_results["artifact_sec_pos"] = acks_followed_by_refs
+            else: #If there are no acks, the artifact must be the last section here
+                artifact_followed_by_refs = outline_titles[arifact_index+1] == paper_language.REFERENCES.value
+                outline_results["artifact_sec_pos"] = artifact_followed_by_refs
+
+        outline_results["correctly_named_abstract"] = paper_language.ABSTRACT.value in outline_titles
+        outline_results["correctly_named_keywords"] = paper_language.KEYWORDS.value in outline_titles
+        return outline_results
+
+    def _check_one_paragraph_abstract(self, paper: ParsedPaper) -> dict:
+        """
+        Checks whether the paper is correctly organized into a single paragraph.
+
+        Watch-out. This implementation gives of plenty of false positives, since there's no
+        easy way of detecting a new paragraph. If any line of the abstract ends in a '.\\n'
+        combo, this alert will be triggered.
+        """
+
+        _, pos_outlines = paper.get_outline()
+        abstract_start = pos_outlines[0][1]#This is kinda risky, but it should be language inespecific;
+        abstract_end = pos_outlines[1][1]
+
+        abstract_lines = paper.get_all_pages()[0][abstract_start+2:abstract_end-1]
+        for line in abstract_lines:
+            line_text = line[0]
+            font_family = line[1]["/BaseFont"][8:]
+            font_size = line[2]
+            if line_text[-1] == "\n" and line_text[-2] == "." and \
+                compute_line_length(line_text,font_family,font_size) < 0.9*COLUMN_SIZE: # This should false positives
+                return {"one_paragraph_on_abstract" : False}
+            
+
+        return {"one_paragraph_on_abstract" : True}
 
 def extract_authors_from_page_lines(page_lines: list[tuple[str,dict,float]]) -> list[dict]:
     """
@@ -228,6 +323,29 @@ def extract_authors_from_page_lines(page_lines: list[tuple[str,dict,float]]) -> 
 
     return authors_read
 
+def extract_acm_paper_outline(paper: ParsedPaper) -> tuple[list[str],list[tuple[int,int]]]:
+    """
+    Given a paper in an ACM-like format, extracts its outline containing
+    every section, subsection and the page it appears on.
+    """
+    
+    outline_titles = []
+    outline_pages = [] 
+    pages = paper.get_all_pages()
+    for page_index in range(len(pages)): 
+        page = pages[page_index]
+        for line_index in range(len(page)):
+            line = page[line_index]
+            line_text = line[0]
+            font_info = line[1]
+            if font_info is None or len(line_text) < 2:
+                continue
+            if font_info["/BaseFont"][8:] == SECTION_TITLE_FONT and line[2] > SUBSECTION_FONT_SIZE:
+                outline_titles.append(line_text)
+                outline_pages.append((page_index,line_index))
+
+    return outline_titles,outline_pages
+
 def get_page_header_lines(paper: ParsedPaper, page_index: int) -> tuple[list[str],float]:
     """
     Given a ParserPaper object with an acm-like paper, retrieves the header lines
@@ -251,11 +369,10 @@ def get_page_header_lines(paper: ParsedPaper, page_index: int) -> tuple[list[str
     
     return header_lines,size
 
-def is_line_too_long(line: str, font_family: str, font_size: float, max_length: float):
+def compute_line_length(line: str, font_family: str, font_size: float) -> float:
     """
-    Given a font family name, a string, and a width threshold in pt, 
-    checks whether the string in the given font family is shorter than
-    the threshold.
+    Given a font family name, a string and a font-size, computes the string length
+     in the given font family.
 
     Uses the Pillow image manipulation lib.
     """
@@ -269,4 +386,4 @@ def is_line_too_long(line: str, font_family: str, font_size: float, max_length: 
     
     width = loaded_font.getlength(line)
 
-    return width > max_length
+    return width

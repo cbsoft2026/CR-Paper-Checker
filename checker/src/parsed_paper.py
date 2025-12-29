@@ -47,7 +47,7 @@ class ParsedPaper():
 
         new_parsed_paper.pages = pages
 
-        new_parsed_paper.language = new_parsed_paper._detect_language()
+        new_parsed_paper._detect_language()
 
         return new_parsed_paper
 
@@ -61,11 +61,26 @@ class ParsedPaper():
 
         If no language is detected, returns None.
         """
+
+        return self.update_language_from_outline(self.get_outline())
+
+    def update_language_from_outline(self,outline: list[str]) -> Enum | None:
+        """
+        Detects the language the paper is written in based on a given
+         list of paper sections, and looking for the language of its 
+        'References' keyword.
+
+        This heuristic assumes that every paper has an unnumbered 'References'
+        secion present in the paper's outline.
+
+        If no language is detected, returns None.
+        """
         for language in LANGUAGES:
-            for outline_item in self.get_outline():
+            for outline_item in outline:
                 if language.REFERENCES.value == str(outline_item).upper():
+                    self.language = language
                     return language
-    
+        self.language = None
         
     def get_language(self) -> Enum | None:
         """
@@ -92,7 +107,7 @@ class ParsedPaper():
         """
         return self.creator
     
-    def get_outline(self) -> list:
+    def get_outline(self) -> list | tuple[list[str],list[tuple[int,int]]]:
         """
         Returns a list with the highest order PDF outline items (Chapters/Sections)
          in the order they appear in the paper. Note that subchapters/subsections are NOT

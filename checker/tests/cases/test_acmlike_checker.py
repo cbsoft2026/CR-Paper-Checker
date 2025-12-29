@@ -19,6 +19,15 @@ LONG_AUTHOR_HEADER = "/data/long_author_header.pdf"
 LONG_TITLE_HEADER = "/data/long_title_header.pdf"
 INVALID_AUTHOR_BLOCKS = "/data/acm_invalid_auth_block.pdf"
 INVALID_AUTHOR_EMAIL = "/data/acm_missing_email.pdf"
+WRONG_ABSTRACT_KEYWORD = "/data/wrong_abstract.pdf"
+WRONG_KEYWORDS_KEYWORD = "/data/wrong_keywords.pdf"
+TWO_PARAGRAPHED_ABSTRACT = "/data/wrong_abstract.pdf"
+NUMBERED_ARTIFACTS = "/data/mock2.pdf"
+ARTIFACTS_BEFORE_CONCLUSION = "/data/artifacts_too_soon.pdf"
+ARTIFACTS_AFTER_ACKS = "/data/acks_soon_wrong.pdf"
+ARTIFACTS_NO_ACKS = "/data/artifact_ok_no_acks.pdf"
+NUMBERED_ACKS = "/data/numbered_acks.pdf"
+WRONG_ACKS_KEYWORD = "/data/acks_soon_wrong.pdf"
 
 def test_acm_ref_format(): 
 
@@ -117,3 +126,103 @@ def test_acm_author_email():
 
     assert not invalid_email_results["author_emails"] 
     assert ok_results["author_emails"] 
+
+def test_sections_not_uppercase():
+    uppercase_sections_paper = ParsedPaper.from_pdf(WRONG_CONF_MOCK_PATH)
+    ok_sections_paper = ParsedPaper.from_pdf(ACM_REF_FORMAT_MOCK_PATH)
+
+    checker = ACMLikeChecker()
+
+    uppercase_sections_results = checker.check_paper(uppercase_sections_paper)
+    ok_sections_results = checker.check_paper(ok_sections_paper)
+
+    assert not uppercase_sections_results["numbered_sections_lowercase"]
+    assert ok_sections_results["numbered_sections_lowercase"]
+
+def test_correct_artifact_sec():
+    wrongly_named_paper = ParsedPaper.from_pdf(WRONG_CONF_MOCK_PATH)
+    artifacts_ok_paper = ParsedPaper.from_pdf(ACM_REF_FORMAT_MOCK_PATH)
+    nubmered_artifacts_paper = ParsedPaper.from_pdf(NUMBERED_ARTIFACTS)
+
+    checker = ACMLikeChecker()
+
+    wrongly_named_results = checker.check_paper(wrongly_named_paper)
+    artifacts_ok_results = checker.check_paper(artifacts_ok_paper)
+    numbered_artifacts_results =  checker.check_paper(nubmered_artifacts_paper)
+
+    assert not wrongly_named_results["correct_artifact_section"]
+    assert not numbered_artifacts_results["correct_artifact_section"]
+    assert artifacts_ok_results["correct_artifact_section"]
+    
+
+def test_artifact_sec_positioning():
+    artifacts_ok_paper = ParsedPaper.from_pdf(LONG_AUTHOR_HEADER)
+    artifacts_no_aks_paper =  ParsedPaper.from_pdf(ARTIFACTS_NO_ACKS)
+    artifacts_too_soon_paper = ParsedPaper.from_pdf(ARTIFACTS_BEFORE_CONCLUSION)
+    artifacts_too_late_paper = ParsedPaper.from_pdf(ARTIFACTS_AFTER_ACKS)
+
+    checker = ACMLikeChecker()
+
+    artifacts_ok_results = checker.check_paper(artifacts_ok_paper)
+    artifacts_no_aks_results = checker.check_paper(artifacts_no_aks_paper)
+    artifacts_too_soon_results = checker.check_paper(artifacts_too_soon_paper)
+    artifacts_too_late_results = checker.check_paper(artifacts_too_late_paper)
+
+    assert artifacts_ok_results["artifact_sec_pos"]
+    assert artifacts_no_aks_results["artifact_sec_pos"]
+    assert not artifacts_too_soon_results["artifact_sec_pos"]
+    assert not artifacts_too_late_results["artifact_sec_pos"]
+
+def test_correct_abstract_keyword():
+    wrongly_named_abstract = ParsedPaper.from_pdf(WRONG_ABSTRACT_KEYWORD)
+    ok_abstract = ParsedPaper.from_pdf(WRONG_KEYWORDS_KEYWORD)
+
+    checker = ACMLikeChecker()
+
+    wrongly_named_results = checker.check_paper(wrongly_named_abstract)
+    ok_results = checker.check_paper(ok_abstract)
+
+    assert not wrongly_named_results["correctly_named_abstract"]
+    assert ok_results["correctly_named_abstract"]
+
+def test_one_paragraph_abstract():
+    two_paragraphed_abstract = ParsedPaper.from_pdf(TWO_PARAGRAPHED_ABSTRACT)
+    ok_abstract = ParsedPaper.from_pdf(WRONG_CONF_MOCK_PATH)
+
+    checker = ACMLikeChecker()
+
+    two_paragraphed_results = checker.check_paper(two_paragraphed_abstract)
+    ok_results = checker.check_paper(ok_abstract)
+
+    assert not two_paragraphed_results["one_paragraph_on_abstract"]
+    assert ok_results["one_paragraph_on_abstract"]
+
+def test_correct_keywords_keyword():
+    wrongly_named_keywords = ParsedPaper.from_pdf(WRONG_KEYWORDS_KEYWORD)
+    ok_named_keywords = ParsedPaper.from_pdf(WRONG_ABSTRACT_KEYWORD)
+
+    checker = ACMLikeChecker()
+
+    wrong_keywords_results = checker.check_paper(wrongly_named_keywords)
+    ok_keywords_results = checker.check_paper(ok_named_keywords)
+
+    assert not wrong_keywords_results["correctly_named_keywords"]
+    assert ok_keywords_results["correctly_named_keywords"]
+
+def test_detects_wrong_acks():
+    no_acks_paper = ParsedPaper.from_pdf(ARTIFACTS_NO_ACKS)
+    ok_acks = ParsedPaper.from_pdf(ACM_REF_FORMAT_MOCK_PATH)
+    numbered_acks = ParsedPaper.from_pdf(NUMBERED_ACKS)
+    wrong_acks = ParsedPaper.from_pdf(WRONG_ACKS_KEYWORD)
+
+    checker = ACMLikeChecker()
+
+    no_acks_result = checker.check_paper(no_acks_paper)
+    ok_acks_results =  checker.check_paper(ok_acks)
+    numbered_acks_results = checker.check_paper(numbered_acks)
+    wrong_acks_results = checker.check_paper(wrong_acks )
+
+    assert no_acks_result["correct_acks_title"]
+    assert ok_acks_results["correct_acks_title"]
+    assert not numbered_acks_results["correct_acks_title"]
+    assert not wrong_acks_results["correct_acks_title"]
