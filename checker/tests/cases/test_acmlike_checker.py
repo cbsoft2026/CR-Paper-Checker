@@ -32,6 +32,7 @@ WRONG_ACKS_KEYWORD = "/data/acks_soon_wrong.pdf"
 RECEIVED_ON_MOCK = "/data/acm_received.pdf"
 NO_TEMPLATE_MOCK = "/data/acm-interim.pdf"
 ACM_REVIEW_MOCK = "/data/acm_review.pdf"
+ABSTRACT_LINK_MOCK = "/data/link_on_abstract.pdf"
 
 def test_acm_ref_format(): 
 
@@ -269,3 +270,15 @@ def test_compiled_on_review_mode():
 
     assert not review_results["acm_not_review"]
     assert ok_results["acm_not_review"]
+
+def test_detect_link_on_abstract():
+    linked_abstract_paper = ParsedPaper.from_pdf(ABSTRACT_LINK_MOCK)
+    no_link_paper = ParsedPaper.from_pdf(LONG_AUTHOR_HEADER)
+
+    checker = ACMLikeChecker()
+
+    linked_results = checker.check_paper(linked_abstract_paper)
+    unlinked_results = checker.check_paper(no_link_paper)
+
+    assert linked_results["abstract_link"]
+    assert not unlinked_results["abstract_link"]

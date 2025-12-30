@@ -48,7 +48,7 @@ class ACMLikeChecker():
         check_results = check_results | self._check_author_blocks(paper)
         check_results = check_results | self._check_page_headers(paper)
         check_results = check_results | self._check_paper_outline(paper)
-        check_results = check_results | self._check_one_paragraph_abstract(paper)
+        check_results = check_results | self._check_abstract(paper)
         check_results = check_results | self._check_no_received_on_tags(paper)
         ## Check if metadata title matches first page title?
         
@@ -260,9 +260,11 @@ class ACMLikeChecker():
         outline_results["correctly_named_keywords"] = paper_language.KEYWORDS.value in outline_titles
         return outline_results
 
-    def _check_one_paragraph_abstract(self, paper: ParsedPaper) -> dict:
+    def _check_abstract(self, paper: ParsedPaper) -> dict:
         """
-        Checks whether the paper is correctly organized into a single paragraph.
+        Checks whether the paper is correctly organized into a single paragraph, and also
+        whether or not there is a link at the end of the abstract (useful for tracks
+        that require video demos / tool links).
 
         Watch-out. This implementation gives of plenty of false positives, since there's no
         easy way of detecting a new paragraph. If any line of the abstract ends in a '.\\n'
@@ -274,16 +276,27 @@ class ACMLikeChecker():
         abstract_end = pos_outlines[1][1]
 
         abstract_lines = paper.get_all_pages()[0][abstract_start+2:abstract_end-1]
-        for line in abstract_lines:
+        last_lines = abstract_lines[-3:]
+
+        one_single_paragraph = True
+
+        for line in abstract_lines[:-3]:
             line_text = line[0]
             font_family = line[1]["/BaseFont"][8:]
             font_size = line[2]
             if line_text[-1] == "\n" and line_text[-2] == "." and \
                 compute_line_length(line_text,font_family,font_size) < 0.9*COLUMN_SIZE: # This should false positives
-                return {"one_paragraph_on_abstract" : False}
-            
+                one_single_paragraph =  False
+                break
+        
+        link_on_abstract = False
+        for line in last_lines:
+            line_text = line[0]
+            if "https://" in line_text:
+                link_on_abstract = True
+                break
 
-        return {"one_paragraph_on_abstract" : True}
+        return {"one_paragraph_on_abstract" : one_single_paragraph, "abstract_link": link_on_abstract}
 
     def _check_no_received_on_tags(self, paper: ParsedPaper) -> dict:
         """
