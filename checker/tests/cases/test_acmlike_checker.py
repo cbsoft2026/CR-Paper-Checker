@@ -28,6 +28,7 @@ ARTIFACTS_AFTER_ACKS = "/data/acks_soon_wrong.pdf"
 ARTIFACTS_NO_ACKS = "/data/artifact_ok_no_acks.pdf"
 NUMBERED_ACKS = "/data/numbered_acks.pdf"
 WRONG_ACKS_KEYWORD = "/data/acks_soon_wrong.pdf"
+RECEIVED_ON_MOCK = "/data/acm_received.pdf"
 
 def test_acm_ref_format(): 
 
@@ -226,3 +227,15 @@ def test_detects_wrong_acks():
     assert ok_acks_results["correct_acks_title"]
     assert not numbered_acks_results["correct_acks_title"]
     assert not wrong_acks_results["correct_acks_title"]
+
+def test_received_on():
+    received_on_paper = ParsedPaper.from_pdf(RECEIVED_ON_MOCK)
+    ok_paper = ParsedPaper.from_pdf(LONG_AUTHOR_HEADER)
+
+    checker = ACMLikeChecker()
+
+    received_on_results = checker.check_paper(received_on_paper)
+    ok_results = checker.check_paper(ok_paper)
+
+    assert not received_on_results["no_received_on_tags"]
+    assert ok_results["no_received_on_tags"]

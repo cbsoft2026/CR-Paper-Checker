@@ -48,6 +48,7 @@ class ACMLikeChecker():
         check_results = check_results | self._check_page_headers(paper)
         check_results = check_results | self._check_paper_outline(paper)
         check_results = check_results | self._check_one_paragraph_abstract(paper)
+        check_results = check_results | self._check_no_received_on_tags(paper)
         ## Check if metadata title matches first page title?
         
         return check_results
@@ -270,6 +271,22 @@ class ACMLikeChecker():
             
 
         return {"one_paragraph_on_abstract" : True}
+
+    def _check_no_received_on_tags(self, paper: ParsedPaper) -> dict:
+        """
+        Checks whether the paper has no 'Received <date>' tags. Equivalent
+        tags, such as "Revised" and "Accepted" are also tested.
+        This method leverages the fact that these tags are usually left at 
+        the end of the last column, on the last page of the manuscript. 
+        """
+
+        last_page = paper.get_all_pages()[-1]
+        last_line  =  last_page[-1][0]
+
+        if len(re.findall(r"(([Rr]eceived)|([Aa]ccepted)|([Rr]evised))",last_line)) > 0:
+            return {"no_received_on_tags": False}
+
+        return {"no_received_on_tags": True}
 
 def extract_authors_from_page_lines(page_lines: list[tuple[str,dict,float]]) -> list[dict]:
     """
