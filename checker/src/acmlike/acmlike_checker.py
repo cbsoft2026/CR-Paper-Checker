@@ -36,8 +36,9 @@ class ACMLikeChecker():
             paper.update_language_from_outline(paper.get_outline())
 
         check_results = {} # For now, saves testing results in a dict structure.
+        check_results = check_results | self._check_template_conformance(paper)
 
-        if paper.get_language() is None:
+        if paper.get_language() is None or not check_results["acm_latex_template"]:
             check_results["references_section"] = False
             return check_results
         else:
@@ -53,6 +54,18 @@ class ACMLikeChecker():
         
         return check_results
     
+    def _check_template_conformance(self, paper: ParsedPaper) -> dict:
+        """
+        Checks whether a paper was compiled with the acmlike template.
+        
+        In the future, it might be interesting to add a min. version to the template
+        """
+
+        if re.match(r"LaTeX with acmart",paper.get_creator()) is None:
+            return {"acm_latex_template" : False}
+        else:
+            return {"acm_latex_template" : True}
+
     def _check_no_ACM_elements(self, paper: ParsedPaper) -> dict:
         """
         Checks whether a paper contains no ACM-exclusive components. Namely,
@@ -78,12 +91,6 @@ class ACMLikeChecker():
                 partial_check_results["acm_ccs_concepts"] = False
 
         return partial_check_results
-
-    def _check_template_conformance(self, paper: ParsedPaper) -> dict:
-        """
-        Checks whether a paper was compiled with the acmlike template.
-        """
-        return {}
 
     def _check_author_blocks(self, paper: ParsedPaper) -> dict:
         """

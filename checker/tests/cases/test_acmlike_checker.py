@@ -29,6 +29,7 @@ ARTIFACTS_NO_ACKS = "/data/artifact_ok_no_acks.pdf"
 NUMBERED_ACKS = "/data/numbered_acks.pdf"
 WRONG_ACKS_KEYWORD = "/data/acks_soon_wrong.pdf"
 RECEIVED_ON_MOCK = "/data/acm_received.pdf"
+NO_TEMPLATE_MOCK = "/data/acm-interim.pdf"
 
 def test_acm_ref_format(): 
 
@@ -239,3 +240,15 @@ def test_received_on():
 
     assert not received_on_results["no_received_on_tags"]
     assert ok_results["no_received_on_tags"]
+
+def test_compiled_with_template():
+    no_template_paper = ParsedPaper.from_pdf(NO_TEMPLATE_MOCK)
+    template_paper = ParsedPaper.from_pdf(LONG_AUTHOR_HEADER)
+
+    checker = ACMLikeChecker()
+    
+    no_template_results = checker.check_paper(no_template_paper)
+    template_results = checker.check_paper(template_paper)
+
+    assert not no_template_results["acm_latex_template"]
+    assert template_results["acm_latex_template"]
