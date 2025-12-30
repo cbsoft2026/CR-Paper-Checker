@@ -56,15 +56,22 @@ class ACMLikeChecker():
     
     def _check_template_conformance(self, paper: ParsedPaper) -> dict:
         """
-        Checks whether a paper was compiled with the acmlike template.
+        Checks whether a paper was compiled with the acmlike template, and without the
+        'review' tag, which interferes with the remainder of the paper checking proccess.
         
         In the future, it might be interesting to add a min. version to the template
         """
 
         if re.match(r"LaTeX with acmart",paper.get_creator()) is None:
-            return {"acm_latex_template" : False}
+            return {"acm_latex_template" : False,
+                    "acm_not_review": True}
         else:
-            return {"acm_latex_template" : True}
+            first_lines = paper.get_all_pages()[0][:3]
+            compiled_on_review = False
+            if first_lines[1][0][0] == '1' and first_lines[2][0][0] == '2':
+                compiled_on_review = True
+            return {"acm_latex_template" : True,
+                    "acm_not_review": not compiled_on_review}
 
     def _check_no_ACM_elements(self, paper: ParsedPaper) -> dict:
         """
@@ -114,9 +121,8 @@ class ACMLikeChecker():
             partial_results["author_emails"] = False
         else:
             for author_dict in authors_extracted:
-                if ',' in author_dict["name"]:
+                if ',' in author_dict["name"] or 'anonymous' in author_dict["name"].lower():
                     partial_results["author_blocks"] = False
-                
                 found_email = False
                 for info_line in author_dict["info"]:
                     if re.match(r'[^@]+@[^@]+\.[^@]',info_line) is not None:

@@ -17,6 +17,7 @@ ACM_CCS_CONCEPTS_MOCK_PATH = "/data/acm_ccs_concepts.pdf"
 WRONG_CONF_MOCK_PATH = "/data/mock2.pdf"
 LONG_AUTHOR_HEADER = "/data/long_author_header.pdf"
 LONG_TITLE_HEADER = "/data/long_title_header.pdf"
+ANONYMOUS_AUTHORS_MOCK = "/data/acm_anonymous.pdf"
 INVALID_AUTHOR_BLOCKS = "/data/acm_invalid_auth_block.pdf"
 INVALID_AUTHOR_EMAIL = "/data/acm_missing_email.pdf"
 WRONG_ABSTRACT_KEYWORD = "/data/wrong_abstract.pdf"
@@ -30,6 +31,7 @@ NUMBERED_ACKS = "/data/numbered_acks.pdf"
 WRONG_ACKS_KEYWORD = "/data/acks_soon_wrong.pdf"
 RECEIVED_ON_MOCK = "/data/acm_received.pdf"
 NO_TEMPLATE_MOCK = "/data/acm-interim.pdf"
+ACM_REVIEW_MOCK = "/data/acm_review.pdf"
 
 def test_acm_ref_format(): 
 
@@ -108,13 +110,16 @@ def test_acm_long_shorauthors_header():
 def test_acm_invalid_author_blocks():
     invalid_author_blocks = ParsedPaper.from_pdf(INVALID_AUTHOR_BLOCKS)
     ok_author_blocks = ParsedPaper.from_pdf(ACM_FOOTNOTE_MOCK_PATH)
+    no_authors_mock = ParsedPaper.from_pdf(ANONYMOUS_AUTHORS_MOCK)
 
     checker = ACMLikeChecker()
 
     invalid_block_results = checker.check_paper(invalid_author_blocks)
     ok_results = checker.check_paper(ok_author_blocks)
+    no_authors_results = checker.check_paper(no_authors_mock)
 
     assert not invalid_block_results["author_blocks"] 
+    assert not no_authors_results["author_blocks"]
     assert ok_results["author_blocks"] 
 
 def test_acm_author_email():
@@ -252,3 +257,15 @@ def test_compiled_with_template():
 
     assert not no_template_results["acm_latex_template"]
     assert template_results["acm_latex_template"]
+
+def test_compiled_on_review_mode():
+    review_paper = ParsedPaper.from_pdf(ACM_REVIEW_MOCK)
+    ok_paper = ParsedPaper.from_pdf(LONG_AUTHOR_HEADER)
+
+    checker = ACMLikeChecker()
+
+    review_results = checker.check_paper(review_paper)
+    ok_results = checker.check_paper(ok_paper)
+
+    assert not review_results["acm_not_review"]
+    assert ok_results["acm_not_review"]
