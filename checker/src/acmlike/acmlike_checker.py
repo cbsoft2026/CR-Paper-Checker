@@ -10,8 +10,10 @@ from PIL import ImageFont
 sys.path.append(str(Path(__file__).absolute().parent.parent.parent))
 
 from src.parsed_paper import ParsedPaper
-from src.acmlike.constants import PAGE_HEADER_FONT, DEFAULT_CONF_HEADER, \
-    FONT_DATA_DIR, AUTHOR_BLOCK_FONT, SECTION_TITLE_FONT, COLUMN_SIZE, SUBSECTION_FONT_SIZE
+from src.constants import FONT_DATA_DIR
+from src.acmlike.constants import PAGE_HEADER_FONT, \
+    AUTHOR_BLOCK_FONT, SECTION_TITLE_FONT, COLUMN_SIZE, SUBSECTION_FONT_SIZE
+from src.track_info import TrackInfo
 
 class ACMLikeChecker():
     """
@@ -22,8 +24,8 @@ class ACMLikeChecker():
     toggled on or off.
     """
 
-    def __init__(self, conf_header=DEFAULT_CONF_HEADER):
-        self.conf_header = conf_header
+    def __init__(self, track_name):
+        self.track_info = TrackInfo.load_track_by_name(track_name)
 
     def check_paper(self, paper: ParsedPaper) -> dict:
         """
@@ -148,13 +150,15 @@ class ACMLikeChecker():
             "short_authors_header": False,
         }
 
+        expected_header = self.track_info.get_track_header()
+
         even_header_lines,_ = get_page_header_lines(paper,1)
         odd_header_lines, header_font_size = get_page_header_lines(paper,2) # This line assumes we're only treating papers with more than 2 pages
 
         if len(even_header_lines) == 0 or len(odd_header_lines) == 0:
             return header_results
 
-        conf_index_on_even_page = even_header_lines[0].find(self.conf_header)
+        conf_index_on_even_page = even_header_lines[0].find(expected_header)
         
         #   If it is not found OR is not at the beginning of header;
         #  Purposely left in this redundant form, so future maintainers
@@ -162,14 +166,14 @@ class ACMLikeChecker():
         if conf_index_on_even_page < 0 or conf_index_on_even_page > 0:
             return header_results
         
-        conf_index_on_odd_page = odd_header_lines[-1].find(self.conf_header)
+        conf_index_on_odd_page = odd_header_lines[-1].find(expected_header)
 
         if conf_index_on_odd_page < 0:
             return header_results
 
         header_results["conf_header"] = True
 
-        even_header_lines[0] = even_header_lines[0][len(self.conf_header):]
+        even_header_lines[0] = even_header_lines[0][len(expected_header):]
         odd_header_lines[-1] = odd_header_lines[-1][0:conf_index_on_odd_page]
 
         authors_ok = True
