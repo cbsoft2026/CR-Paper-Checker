@@ -4,8 +4,8 @@ from acmlike.acmlike_checker import ACMLikeChecker
 
 def main():
 
-    parsed_paper = ParsedPaper.from_pdf("/data/link_on_abstract.pdf")
-    checker = ACMLikeChecker()
+    parsed_paper = ParsedPaper.from_pdf("/data/acm_barely_not_ok.pdf")
+    checker = ACMLikeChecker("sbes_26_rt")
 
     checker.check_paper(parsed_paper)
 

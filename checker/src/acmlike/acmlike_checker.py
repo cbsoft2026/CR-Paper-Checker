@@ -52,6 +52,7 @@ class ACMLikeChecker():
         check_results = check_results | self._check_paper_outline(paper)
         check_results = check_results | self._check_abstract(paper)
         check_results = check_results | self._check_no_received_on_tags(paper)
+        check_results = check_results | self._check_page_limits(paper)
         ## Check if metadata title matches first page title?
         
         return check_results
@@ -141,7 +142,7 @@ class ACMLikeChecker():
         B) The right column of even pages include the short list of authors;
         C) The remaining columns should contain the date and place the conf. was held in.
 
-        ACM-like column width: ~220'pt'. (Harcoded af, good luck adapting this to another template)
+        ACM-like column width: ~220'pt'. (Harcoded af, good luck adapting this to another template :)
         """
 
         header_results = {
@@ -193,7 +194,50 @@ class ACMLikeChecker():
 
         return header_results
 
-    def _check_paper_outline(self,paper: ParsedPaper) -> dict:
+    def _check_page_limits(self, paper: ParsedPaper) -> dict:
+        """
+        Checks if the paper respects the track's maximum number of pages with content
+        and with references. Fails if paper has appendixes.
+        """
+
+        page_limit_results = {
+            "content_pages" : True,
+            "total_pages" : paper.get_num_pages() <= self.track_info.get_total_pages_limit()
+        }
+
+        last_item_page, last_item_line = paper.get_outline()[1][-1]
+        last_item_label = paper.get_outline()[0][-1]
+        paper_language = paper.get_language()
+
+        #print(paper.get_outline())
+
+        if last_item_page  + 1 <= self.track_info.get_content_pages_limit():
+            return page_limit_results
+
+        if paper_language is None: # In this case, looking for REF. section won't be of any use :(
+            page_limit_results["content_pages"] = False
+            return page_limit_results
+
+        if last_item_label != paper_language.REFERENCES.value:
+            # In this case, the paper seems to have an appendix or another section following the references
+            # The test fails, and requires manual inspection on whether the content limits are being respected. 
+            page_limit_results["content_pages"] = False       
+            return page_limit_results
+        
+        refs_page = paper.get_all_pages()[last_item_page]
+        for line_index in range(last_item_line):
+            line = refs_page[line_index]
+            line_content = line[0]
+            
+            if line_content not in ("","\n"): #and :
+                line_font_family = line[1]["/BaseFont"][8:]
+                if line_font_family != PAGE_HEADER_FONT:
+                    page_limit_results["content_pages"] = False
+                    return page_limit_results
+
+        return page_limit_results
+
+    def _check_paper_outline(self, paper: ParsedPaper) -> dict:
         """
         Checks if the paper outline respects section name formatting and contains
         the sections in the correct order.

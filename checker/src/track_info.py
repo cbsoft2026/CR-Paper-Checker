@@ -35,6 +35,8 @@ class TrackInfo():
         
         new_instance.track_name = loaded_info["name"]
         new_instance.track_header = loaded_info["conference_header"]
+        new_instance.max_paper_pages = loaded_info["total_page_limit"]
+        new_instance.max_content_pages = loaded_info["content_page_limit"]
 
         return new_instance
 
@@ -44,3 +46,16 @@ class TrackInfo():
         """
 
         return self.track_header
+
+    def get_total_pages_limit(self):
+        """
+        Returns the track's maximum paper length, counting pages dedicated exclusively for references.
+        """
+        return self.max_paper_pages
+
+    def get_content_pages_limit(self):
+        """
+        Returns the track's maximum paper length (in number of pages) for its main contents, excluding
+        references.
+        """
+        return self.max_content_pages

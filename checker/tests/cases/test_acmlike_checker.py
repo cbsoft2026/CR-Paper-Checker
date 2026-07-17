@@ -33,6 +33,8 @@ RECEIVED_ON_MOCK = "/data/acm_received.pdf"
 NO_TEMPLATE_MOCK = "/data/acm-interim.pdf"
 ACM_REVIEW_MOCK = "/data/acm_review.pdf"
 ABSTRACT_LINK_MOCK = "/data/link_on_abstract.pdf"
+ACM_BARELY_OK_CONTENT = "/data/acm_barely_ok_refs.pdf"
+ACM_BARELY_NOT_OK_CONTENT = "/data/acm_barely_not_ok.pdf"
 
 def test_acm_ref_format(acm_checker): 
 
@@ -235,3 +237,20 @@ def test_detect_link_on_abstract(acm_checker):
 
     assert linked_results["abstract_link"]
     assert not unlinked_results["abstract_link"]
+
+def test_total_page_limits(acm_checker):
+    any_paper = ParsedPaper.from_pdf(ACM_REVIEW_MOCK)
+    
+    short_paper_checker = ACMLikeChecker("sbes_24_latam")
+
+    assert acm_checker.check_paper(any_paper)["total_pages"]
+    assert not short_paper_checker.check_paper(any_paper)["total_pages"]
+
+def test_content_page_limits(acm_checker):
+    not_ok_appdx = ParsedPaper.from_pdf(ACM_REVIEW_MOCK) 
+    limit_ok = ParsedPaper.from_pdf(ACM_BARELY_OK_CONTENT)
+    limit_not_ok = ParsedPaper.from_pdf(ACM_BARELY_NOT_OK_CONTENT)
+
+    assert not acm_checker.check_paper(not_ok_appdx)["content_pages"]
+    assert acm_checker.check_paper(limit_ok)["content_pages"]
+    assert not acm_checker.check_paper(limit_not_ok)["content_pages"]
