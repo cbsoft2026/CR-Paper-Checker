@@ -13,7 +13,7 @@ from src.parsed_paper import ParsedPaper
 from src.constants import FONT_DATA_DIR
 from src.acmlike.constants import PAGE_HEADER_FONT, \
     AUTHOR_BLOCK_FONT, SECTION_TITLE_FONT, COLUMN_SIZE, SUBSECTION_FONT_SIZE
-from src.track_info import TrackInfo
+from src.ruleset_info import RuleSetInfo
 
 class ACMLikeChecker():
     """
@@ -24,8 +24,8 @@ class ACMLikeChecker():
     toggled on or off.
     """
 
-    def __init__(self, track_name):
-        self.track_info = TrackInfo.load_track_by_name(track_name)
+    def __init__(self, track_name, testing=False):
+        self.track_info = RuleSetInfo.load_track_by_name(track_name, testing=testing)
 
     def check_paper(self, paper: ParsedPaper) -> dict:
         """
@@ -202,7 +202,7 @@ class ACMLikeChecker():
 
         page_limit_results = {
             "content_pages" : True,
-            "total_pages" : paper.get_num_pages() <= self.track_info.get_total_pages_limit()
+            "total_pages" : paper.get_num_pages() <= self.track_info.get_track_total_pages_limit()
         }
 
         last_item_page, last_item_line = paper.get_outline()[1][-1]
@@ -211,7 +211,7 @@ class ACMLikeChecker():
 
         #print(paper.get_outline())
 
-        if last_item_page  + 1 <= self.track_info.get_content_pages_limit():
+        if last_item_page  + 1 <= self.track_info.get_track_content_pages_limit():
             return page_limit_results
 
         if paper_language is None: # In this case, looking for REF. section won't be of any use :(

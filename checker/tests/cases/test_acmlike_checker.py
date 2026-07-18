@@ -71,7 +71,7 @@ def test_acm_conf_header(acm_checker):
     wrong_results = acm_checker.check_paper(wrong_conf)
     ok_results = acm_checker.check_paper(ok_conf)
 
-    alternative_checker = ACMLikeChecker("sbes_24_nier")
+    alternative_checker = ACMLikeChecker("sbes_24_nier",testing=True)
 
     assert not wrong_results["conf_header"]
     assert ok_results["conf_header"]
@@ -241,7 +241,7 @@ def test_detect_link_on_abstract(acm_checker):
 def test_total_page_limits(acm_checker):
     any_paper = ParsedPaper.from_pdf(ACM_REVIEW_MOCK)
     
-    short_paper_checker = ACMLikeChecker("sbes_24_latam")
+    short_paper_checker = ACMLikeChecker("sbes_24_latam",testing=True)
 
     assert acm_checker.check_paper(any_paper)["total_pages"]
     assert not short_paper_checker.check_paper(any_paper)["total_pages"]

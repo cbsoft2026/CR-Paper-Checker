@@ -11,4 +11,4 @@ def acm_checker():
     """
     Returns the default acm_like_checker
     """
-    return ACMLikeChecker("sbes_26_rt")
+    return ACMLikeChecker("sbes_26_rt", testing=True)

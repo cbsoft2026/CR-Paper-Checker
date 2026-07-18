@@ -1,5 +1,5 @@
 """
-Holds the definition of the TrackInfo class. 
+Holds the definition of the RuleSetInfo class. 
 """
 
 import sys
@@ -8,24 +8,27 @@ from pathlib import Path
 
 sys.path.append(str(Path(__file__).absolute().parent.parent))
 
-from src.constants import TRACKS_INFO_FILE
+from src.constants import RULESET_FILE, TEST_RULESET_FILE
 
-class TrackInfo():
+class RuleSetInfo():
     """
-    Encapsulates info pertaining to track specific data for a specific 
-    track related to the conferece.
+    Encapsulates info pertaining to track specific data and paper 
+     checking configuration for a specific track related to the conferece.
     """
 
-    def load_track_by_name(track_name):
+    def load_track_by_name(track_name, testing):
         """
         Creates a new TrackInfor instance loading the info from a 
         """
 
-        new_instance = TrackInfo()
+        new_instance = RuleSetInfo()
+        info_path = TEST_RULESET_FILE if testing else RULESET_FILE
+
         loaded_info = None
 
-        with open(TRACKS_INFO_FILE) as track_info_file:
-            track_infos = json.load(track_info_file)
+        with open(info_path) as track_info_file:
+            ruleset_info = json.load(track_info_file)
+            track_infos = ruleset_info["tracks"]
             for track_info in track_infos:
                 if track_info["name"] == track_name:
                     loaded_info = track_info
@@ -47,13 +50,13 @@ class TrackInfo():
 
         return self.track_header
 
-    def get_total_pages_limit(self):
+    def get_track_total_pages_limit(self):
         """
         Returns the track's maximum paper length, counting pages dedicated exclusively for references.
         """
         return self.max_paper_pages
 
-    def get_content_pages_limit(self):
+    def get_track_content_pages_limit(self):
         """
         Returns the track's maximum paper length (in number of pages) for its main contents, excluding
         references.

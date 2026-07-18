@@ -1,3 +1,4 @@
 data/*
 !data/fonts
+!data/rulesets
 *__pycache__
