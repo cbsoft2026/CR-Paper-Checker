@@ -11,6 +11,12 @@ The script assumes you have access to `docker-compose` or an alternative contain
 
 Additionally, the tester requires the TrueType font archives for the fonts checked in the template. These must be placed inside the `data/fonts/` dir. See the `test_data` dir for an example.
 
+### Configuration
+
+Before executing the script, some conference-related adjustments are needed.
+
+A file in the `data/ruleset/` includes information on the constraints to be checked for a give conference, as well as the track headers and page limits. Please follow carefully the syntax used on the example data included from past conferences, such as that seen in  `data/ruleset/cbsoft26.json`.
+
 ### Running
 
 Run the script by running `docker compose up` in the `checker` directory.

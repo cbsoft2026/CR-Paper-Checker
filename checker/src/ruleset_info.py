@@ -35,11 +35,13 @@ class RuleSetInfo():
                     break
             if loaded_info is None:
                 loaded_info = track_infos[0]
+            
+            new_instance.rule_messages = ruleset_info["rules"]
         
         new_instance.track_name = loaded_info["name"]
         new_instance.track_header = loaded_info["conference_header"]
         new_instance.max_paper_pages = loaded_info["total_page_limit"]
-        new_instance.max_content_pages = loaded_info["content_page_limit"]
+        new_instance.max_content_pages = loaded_info["content_page_limit"]       
 
         return new_instance
 
@@ -62,3 +64,14 @@ class RuleSetInfo():
         references.
         """
         return self.max_content_pages
+    
+    def get_check_message_if_existent(self, check_key) -> None | str:
+        """
+        If a given check message is included in the conference's ruleset, returns
+        the instructive message that advises what the authors should do to conform to 
+        the given check. 
+
+        If the check is absent, returns None.
+        """
+
+        return self.rule_messages.get(check_key, None)

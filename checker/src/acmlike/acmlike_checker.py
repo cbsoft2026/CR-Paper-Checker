@@ -56,6 +56,31 @@ class ACMLikeChecker():
         ## Check if metadata title matches first page title?
         
         return check_results
+
+    def check_and_compose_instructions(self, paper: ParsedPaper) -> tuple[dict, str]:
+        """
+        Checks whether a given paper conforms to the checks associated with this Template Checker
+        and composes a human readable set of instructions that guide the authors of the
+        original paper towards fixing inconsistencies.
+
+        Additinally, drops from the check dict the keys not included in the track's ruleset.
+        """
+
+        check_results = dict(self.check_paper(paper))
+        composite_string = ""
+
+        for check_key, check_value in check_results.items():
+            if check_value:
+                continue
+
+            resulting_message = self.track_info.get_check_message_if_existent(check_key)
+            if resulting_message is not None:
+                composite_string += resulting_message + "\n"
+            else:
+                del check_results[check_key]
+
+        return (check_results, composite_string)
+
     
     def _check_template_conformance(self, paper: ParsedPaper) -> dict:
         """
