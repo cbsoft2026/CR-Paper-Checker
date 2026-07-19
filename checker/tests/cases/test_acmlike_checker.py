@@ -35,6 +35,8 @@ ACM_REVIEW_MOCK = "/data/acm_review.pdf"
 ABSTRACT_LINK_MOCK = "/data/link_on_abstract.pdf"
 ACM_BARELY_OK_CONTENT = "/data/acm_barely_ok_refs.pdf"
 ACM_BARELY_NOT_OK_CONTENT = "/data/acm_barely_not_ok.pdf"
+ACM_LIKE_TEMPLATE_CBSOFT26 = "/data/template_26.pdf"
+ACK_WRONG_TITLE = "/data/acm_wrong_ack_title.pdf"
 
 def test_acm_ref_format(acm_checker): 
 
@@ -122,7 +124,7 @@ def test_acm_author_email(acm_checker):
     assert not invalid_email_results["author_emails"] 
     assert ok_results["author_emails"] 
 
-def test_sections_not_uppercase(acm_checker):
+def test_numbered_sections_not_uppercase(acm_checker):
     uppercase_sections_paper = ParsedPaper.from_pdf(WRONG_CONF_MOCK_PATH)
     ok_sections_paper = ParsedPaper.from_pdf(ACM_REF_FORMAT_MOCK_PATH)
     uppercase_sections_results = acm_checker.check_paper(uppercase_sections_paper)
@@ -131,9 +133,18 @@ def test_sections_not_uppercase(acm_checker):
     assert not uppercase_sections_results["numbered_sections_lowercase"]
     assert ok_sections_results["numbered_sections_lowercase"]
 
+def test_no_sections_uppercase(acm_checker):
+    uppercase_sections_paper = ParsedPaper.from_pdf(WRONG_CONF_MOCK_PATH)
+    ok_sections_paper = ParsedPaper.from_pdf(ACM_LIKE_TEMPLATE_CBSOFT26)
+    uppercase_sections_results = acm_checker.check_paper(uppercase_sections_paper)
+    ok_sections_results = acm_checker.check_paper(ok_sections_paper)
+
+    assert not uppercase_sections_results["all_sections_lowercase"]
+    assert ok_sections_results["all_sections_lowercase"]
+
 def test_correct_artifact_sec(acm_checker):
     wrongly_named_paper = ParsedPaper.from_pdf(WRONG_CONF_MOCK_PATH)
-    artifacts_ok_paper = ParsedPaper.from_pdf(ACM_REF_FORMAT_MOCK_PATH)
+    artifacts_ok_paper = ParsedPaper.from_pdf(ACM_LIKE_TEMPLATE_CBSOFT26)
     nubmered_artifacts_paper = ParsedPaper.from_pdf(NUMBERED_ARTIFACTS)
     wrongly_named_results = acm_checker.check_paper(wrongly_named_paper)
     artifacts_ok_results = acm_checker.check_paper(artifacts_ok_paper)
@@ -161,7 +172,7 @@ def test_artifact_sec_positioning(acm_checker):
 
 def test_correct_abstract_keyword(acm_checker):
     wrongly_named_abstract = ParsedPaper.from_pdf(WRONG_ABSTRACT_KEYWORD)
-    ok_abstract = ParsedPaper.from_pdf(WRONG_KEYWORDS_KEYWORD)
+    ok_abstract = ParsedPaper.from_pdf(ACM_LIKE_TEMPLATE_CBSOFT26)
     wrongly_named_results = acm_checker.check_paper(wrongly_named_abstract)
     ok_results = acm_checker.check_paper(ok_abstract)
 
@@ -179,7 +190,7 @@ def test_one_paragraph_abstract(acm_checker):
 
 def test_correct_keywords_keyword(acm_checker):
     wrongly_named_keywords = ParsedPaper.from_pdf(WRONG_KEYWORDS_KEYWORD)
-    ok_named_keywords = ParsedPaper.from_pdf(WRONG_ABSTRACT_KEYWORD)
+    ok_named_keywords = ParsedPaper.from_pdf(ACM_LIKE_TEMPLATE_CBSOFT26)
     wrong_keywords_results = acm_checker.check_paper(wrongly_named_keywords)
     ok_keywords_results = acm_checker.check_paper(ok_named_keywords)
 
@@ -188,13 +199,13 @@ def test_correct_keywords_keyword(acm_checker):
 
 def test_detects_wrong_acks(acm_checker):
     no_acks_paper = ParsedPaper.from_pdf(ARTIFACTS_NO_ACKS)
-    ok_acks = ParsedPaper.from_pdf(ACM_REF_FORMAT_MOCK_PATH)
+    ok_acks = ParsedPaper.from_pdf(ACM_LIKE_TEMPLATE_CBSOFT26)
     numbered_acks = ParsedPaper.from_pdf(NUMBERED_ACKS)
-    wrong_acks = ParsedPaper.from_pdf(WRONG_ACKS_KEYWORD)
+    wrong_acks = ParsedPaper.from_pdf(ACK_WRONG_TITLE)
     no_acks_result = acm_checker.check_paper(no_acks_paper)
     ok_acks_results =  acm_checker.check_paper(ok_acks)
     numbered_acks_results = acm_checker.check_paper(numbered_acks)
-    wrong_acks_results = acm_checker.check_paper(wrong_acks )
+    wrong_acks_results = acm_checker.check_paper(wrong_acks)
 
     assert no_acks_result["correct_acks_title"]
     assert ok_acks_results["correct_acks_title"]

@@ -269,6 +269,7 @@ class ACMLikeChecker():
         """
 
         outline_results = {
+            "all_sections_lowercase" : True,
             "numbered_sections_lowercase": True,
             "correct_artifact_section" : False,
             "correctly_named_abstract" : False,
@@ -288,6 +289,9 @@ class ACMLikeChecker():
         for item_index in range(len(outline_titles)):
             item = outline_titles[item_index]
             first_char = item[0]
+            if item == item.upper():
+                outline_results["all_sections_lowercase"] = False
+            
             try:
                 _ = int(first_char)
                 # In this case, we're in a numbered section

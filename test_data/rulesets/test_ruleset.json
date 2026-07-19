@@ -27,7 +27,7 @@
         "short_authors_header" : "Além do nome correto da conferência na coluna esquerda, a coluna direita das páginas pares deve ter uma versão abreviada dos sobrenomes dos autores, sem ultrapassar o limite da coluna direita.",
         "author_blocks" : "Cada autor do artigo deve corresponder a um bloco diferente na capa do artigo.",
         "author_emails" : "O bloco de cada autor do artigo deve conter o seu endereço de email.",
-        "numbered_sections_lowercase" : "O nome de todas as seções deve seguir title casing, com apenas a primeira letra de cada palavra em caixa alta.",
+        "all_sections_lowercase" : "O nome de todas as seções deve seguir title casing, com apenas a primeira letra de cada palavra em caixa alta.",
         "correct_artifact_section": "A seção de Disponibilidade de Artefatos / Artifact Availability deve ter este exato nome (de acordo com a linguagem do artigo).",
         "artifact_sec_pos" : "A seção de Disponibilidade de Artefatos deve estar depois da conclusão e antes dos agradecimentos, apêndices e referências.",
         "correctly_named_abstract": "O artigo deve conter apenas uma seção de Resumo / Abstract com o nome correto e em title casing (com apenas a primeira letra em caixa alta).",
