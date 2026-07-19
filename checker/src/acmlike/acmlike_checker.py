@@ -275,7 +275,8 @@ class ACMLikeChecker():
             "correctly_named_abstract" : False,
             "correctly_named_keywords": False,
             "artifact_sec_pos": False,
-            "correct_acks_title": True 
+            "correct_acks_title": True,
+            "portuguse_only_abstract": True
         }
 
         outline_titles,_ = paper.get_outline() 
@@ -285,6 +286,8 @@ class ACMLikeChecker():
 
         if paper_language is None:
             return outline_results
+        
+        english_written = paper_language.LANG_CODE.value == "EN"
         
         for item_index in range(len(outline_titles)):
             item = outline_titles[item_index]
@@ -297,6 +300,10 @@ class ACMLikeChecker():
                 # In this case, we're in a numbered section
                 word_by_word = item.split(' ')
                 not_numbered = ' '.join(word_by_word[1:])
+
+                if not english_written and not_numbered.lower() == paper_language.ABSTRACT.value.lower():
+                    outline_results["portuguse_only_abstract"] = False
+
                 if not_numbered == not_numbered.upper():
                     outline_results["numbered_sections_lowercase"] = False
 
@@ -310,6 +317,9 @@ class ACMLikeChecker():
 
                     arifact_index = item_index
             except:
+                if not english_written and item.lower() == paper_language.ABSTRACT.value.lower():
+                    outline_results["portuguse_only_abstract"] = False
+            
                 if acks_index == -1 and item == paper_language.ACKS.value:
                     acks_index = item_index
                 elif acks_index == -1 and item in paper_language.WRONG_ACKS.value:

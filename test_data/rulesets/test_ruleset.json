@@ -32,6 +32,7 @@
         "artifact_sec_pos" : "A seção de Disponibilidade de Artefatos deve estar depois da conclusão e antes dos agradecimentos, apêndices e referências.",
         "correctly_named_abstract": "O artigo deve conter apenas uma seção de Resumo / Abstract com o nome correto e em title casing (com apenas a primeira letra em caixa alta).",
         "one_paragraph_on_abstract" : "O resumo do artigo deve conter um só parágrafo.",
+        "portuguse_only_abstract" : "Se o artigo foi escrito em português, ele não pode conter um resumo escrito em inglês (Abstract).",
         "correctly_named_keywords" : "A listagem de Palavras-chave / Keywords deve ter este exato título e em title casing (com apenas a primeira letra em caixa alta).",
         "references_section" : "A seção de Referências / References não pode estar numerada e deve ter este exato título em title casing (com apenas a primeira letra em caixa alta).",
         "correct_acks_title" : "Se o artigo incluir uma seção de Agradecimentos / Acknowledgements, ela deve ter este exato título em title casing (com apenas a primeira letra em caixa alta).",
@@ -40,7 +41,7 @@
         "acm_not_review" : "Remova a numeração de linhas (modo review) da versão camera-ready do artigo.",
         "content_pages" : "O conteúdo principal do artigo (excluindo referências) deve respeitar o limite de páginas imposto na chamada da trilha.",
         "total_pages" : "O artigo completo (incluindo referências) deve respeitar o limite de páginas na chamada da trilha.",
-        
+
         "abstract_link" : "O resumo deve incluir um link para a ferramenta apresentada no artigo."
     }
 }

@@ -37,6 +37,7 @@ ACM_BARELY_OK_CONTENT = "/data/acm_barely_ok_refs.pdf"
 ACM_BARELY_NOT_OK_CONTENT = "/data/acm_barely_not_ok.pdf"
 ACM_LIKE_TEMPLATE_CBSOFT26 = "/data/template_26.pdf"
 ACK_WRONG_TITLE = "/data/acm_wrong_ack_title.pdf"
+ACM_PT_ABSTRACT_RESUMO = "/data/acm_pt_abstract.pdf"
 
 def test_acm_ref_format(acm_checker): 
 
@@ -265,3 +266,10 @@ def test_content_page_limits(acm_checker):
     assert not acm_checker.check_paper(not_ok_appdx)["content_pages"]
     assert acm_checker.check_paper(limit_ok)["content_pages"]
     assert not acm_checker.check_paper(limit_not_ok)["content_pages"]
+
+def test_pt_only_abstract(acm_checker):
+    ok_paper = ParsedPaper.from_pdf(ACM_LIKE_TEMPLATE_CBSOFT26)
+    doubled_abstract_paper = ParsedPaper.from_pdf(ACM_PT_ABSTRACT_RESUMO)
+
+    assert acm_checker.check_paper(ok_paper)["portuguse_only_abstract"]
+    assert not acm_checker.check_paper(doubled_abstract_paper)["portuguse_only_abstract"]
