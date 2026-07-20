@@ -1,9 +1,66 @@
 {
     "tracks": [{
         "name": "sbes_26_rt",
-        "conference_header": "SBES’26, September 08–12, 2026, São Paulo, SP",
+        "conference_header": "SBES’26, September 08–11, 2026, São Paulo, SP",
         "content_page_limit": 10,
         "total_page_limit": 12
+    },  
+    {
+        "name": "sbes_26_education",
+        "conference_header": "SBES’26, September 08–11, 2026, São Paulo, SP",
+        "content_page_limit": 10,
+        "total_page_limit": 12
+    },  
+    {
+        "name": "sbes_26_iier",
+        "conference_header": "SBES’26, September 08–11, 2026, São Paulo, SP",
+        "content_page_limit": 6,
+        "total_page_limit": 7
+    },  
+    {
+        "name": "sbes_26_tools",
+        "conference_header": "SBES’26, September 08–11, 2026, São Paulo, SP",
+        "content_page_limit": 6,
+        "total_page_limit": 7,
+        "specific_rules": {
+            "abstract_link" : "O resumo deve incluir um link para a ferramenta apresentada no artigo."
+        }
+    },  
+    {
+        "name": "sblp_26_full",
+        "conference_header": "SBLP’26, September 08–11, 2026, São Paulo, SP",
+        "content_page_limit": 9,
+        "total_page_limit": 12
+    },  
+    {
+        "name": "sblp_26_short",
+        "conference_header": "SBLP’26, September 08–11, 2026, São Paulo, SP",
+        "content_page_limit": 5,
+        "total_page_limit": 8
+    },  
+    {
+        "name": "sbcars_26_full",
+        "conference_header": "SBCARS’26, September 08–11, 2026, São Paulo, SP",
+        "content_page_limit": 10,
+        "total_page_limit": 12
+    },
+    {
+        "name": "sbcars_26_short",
+        "conference_header": "SBCARS’26, September 08–11, 2026, São Paulo, SP",
+        "content_page_limit": 4,
+        "total_page_limit": 6
+    },
+    {
+        "name": "sast_26_full",
+        "conference_header": "SAST’26, September 08–11, 2026, São Paulo, SP",
+        "content_page_limit": 10,
+        "total_page_limit": 10
+    },
+    {
+        "name": "sast_26_short",
+        "conference_header": "SAST’26, September 08–11, 2026, São Paulo, SP",
+        "content_page_limit": 3,
+        "total_page_limit": 3
     }],
 
     "rules": {
@@ -18,7 +75,7 @@
         "all_sections_lowercase" : "O nome de todas as seções deve seguir title casing, com apenas a primeira letra de cada palavra em caixa alta.",
         "correct_artifact_section": "A seção de Disponibilidade de Artefatos / Artifact Availability deve ter este exato nome (de acordo com a linguagem do artigo).",
         "artifact_sec_pos" : "A seção de Disponibilidade de Artefatos deve estar depois da conclusão e antes dos agradecimentos, apêndices e referências.",
-        "correctly_named_abstract": "O artigo deve conter apenas uma seção de Resumo / Abstract com o nome correto e em title casing (com apenas a primeira letra em caixa alta).",
+        "correctly_named_abstract": "O artigo deve conter uma seção de Resumo / Abstract com o nome correto e em title casing (com apenas a primeira letra em caixa alta).",
         "one_paragraph_on_abstract" : "O resumo do artigo deve conter um só parágrafo.",
         "portuguse_only_abstract" : "Se o artigo foi escrito em português, ele não pode conter um resumo escrito em inglês (Abstract).",
         "correctly_named_keywords" : "A listagem de Palavras-chave / Keywords deve ter este exato título e em title casing (com apenas a primeira letra em caixa alta).",
@@ -29,8 +86,6 @@
         "acm_not_review" : "Remova a numeração de linhas (modo review) da versão camera-ready do artigo.",
         "content_pages" : "O conteúdo principal do artigo (excluindo referências) deve respeitar o limite de páginas imposto na chamada da trilha.",
         "total_pages" : "O artigo completo (incluindo referências) deve respeitar o limite de páginas na chamada da trilha.",
-        "no_author_biographies" : "O artigo não pode conter uma seção dedicada às biografias dos autores.",
-
-        "abstract_link" : "O resumo deve incluir um link para a ferramenta apresentada no artigo."
+        "no_author_biographies" : "O artigo não pode conter uma seção dedicada às biografias dos autores."
     }
 }
