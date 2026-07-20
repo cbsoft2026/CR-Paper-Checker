@@ -1,8 +1,6 @@
 # Camera Ready Template Conformance Checker 
 ## CBSoft'26 Proceedings Co-Chairs
 
-W.i.P.
-
 Tooling made to ease the manual validation of the camera ready papers accepted at the CBSoft symposia and workshops, responsible for checking whether the papers conform to the template expeted by the proceedings team.
 
 ### Installation
@@ -15,11 +13,20 @@ Additionally, the tester requires the TrueType font archives for the fonts check
 
 Before executing the script, some conference-related adjustments are needed.
 
-A file in the `data/ruleset/` includes information on the constraints to be checked for a give conference, as well as the track headers and page limits. Please follow carefully the syntax used on the example data included from past conferences, such as that seen in  `data/ruleset/cbsoft26.json`.
+A file in the `data/ruleset/` includes information on the constraints to be checked for a give conference, as well as the track headers and page limits. Please follow carefully the syntax used on the example data included from past conferences, such as that seen in `data/ruleset/cbsoft26.json`.
 
-### Running
+### Checking a Single Paper
 
 Run the script by running `docker compose up` in the `checker` directory.
+
+In order to check whether a single paper (possibly yours) conforms to the rules of any specific track, first ensure the a copy of paper's pdf isavailable in the `./data/` directory.
+
+Then, invoke the checker container by adapting the following line and executing it at the project's root dir (the one this README finds itself in):
+```(bash)
+$> docker compose run --remove-orphans -e CHECK_PAPER_AT=mock1.pdf -e TRACK=sbes_26_rt checker
+```
+
+The environment variable `CHECK_PAPER_AT` points to the paper to be checked. In the case presented, corresponding to the `data/mock1.pdf` file. Additionally, it is necessary to specify the track the paper pertains to. In the example, the paper is checked against the restrictions of the Research Track of SBES 2026. The available tracks can be read in the ruleset file specified in the `RULESET_FILE` variable of the `checker/src/constant.py` file (in the current case, `data/ruleset/cbsoft26.json`).
 
 ### Testing
 

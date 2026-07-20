@@ -9,7 +9,7 @@ services:
       DATA_DIR: "/data"
     user: "${UID}:${GID}"
     volumes:
-      - ../data/:/data:z
-      - ./src/:/src:z
+      - ./data/:/data:z
+      - ./checker/src/:/src:z
     #stdin_open: true
     command: ["python3", "src/main.py"]

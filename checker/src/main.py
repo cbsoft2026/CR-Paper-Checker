@@ -1,11 +1,22 @@
-from pypdf import PdfReader
+import os
 from parsed_paper import ParsedPaper
 from acmlike.acmlike_checker import ACMLikeChecker
 
 def main():
+    track = os.environ["TRACK"]
 
-    parsed_paper = ParsedPaper.from_pdf("/data/acm_en_biographies.pdf")
-    checker = ACMLikeChecker("sbes_26_rt")
+    single_paper = os.environ.get("CHECK_PAPER_AT")
+    paper_batch = os.environ.get("CHECK_PAPERS_AT")
+    
+    
+    checker = ACMLikeChecker(track)
+
+    if single_paper is not None:
+        check_single_paper(checker,single_paper)
+    
+
+def check_single_paper(checker, paper_path):
+    parsed_paper = ParsedPaper.from_pdf("/data/" + paper_path)
 
     _,helpful_message = checker.check_and_compose_instructions(parsed_paper)
 
