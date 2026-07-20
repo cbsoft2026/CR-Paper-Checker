@@ -68,6 +68,7 @@ class ACMLikeChecker():
 
         check_results = dict(self.check_paper(paper))
         composite_string = ""
+        ignored_keys = set()
 
         for check_key, check_value in check_results.items():
             if check_value:
@@ -75,9 +76,12 @@ class ACMLikeChecker():
 
             resulting_message = self.track_info.get_check_message_if_existent(check_key)
             if resulting_message is not None:
-                composite_string += resulting_message + "\n"
+                composite_string += " - " + resulting_message + "\n"
             else:
-                del check_results[check_key]
+                ignored_keys.add(check_key)
+                
+        for ignored_key in ignored_keys:
+            del check_results[ignored_key]
 
         return (check_results, composite_string)
 

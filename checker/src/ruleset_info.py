@@ -34,14 +34,19 @@ class RuleSetInfo():
                     loaded_info = track_info
                     break
             if loaded_info is None:
-                loaded_info = track_infos[0]
+                print("No track configuration found for",track_name)
+                print("Please refer to the README and choose one of the tracks listed in the ruleset file", info_path[1:])
+                exit(1)
             
-            new_instance.rule_messages = ruleset_info["rules"]
+        new_instance.rule_messages = ruleset_info["rules"]
+
+        if "specific_rules" in loaded_info:
+            new_instance.rule_messages = new_instance.rule_messages | loaded_info["specific_rules"]
         
         new_instance.track_name = loaded_info["name"]
         new_instance.track_header = loaded_info["conference_header"]
         new_instance.max_paper_pages = loaded_info["total_page_limit"]
-        new_instance.max_content_pages = loaded_info["content_page_limit"]       
+        new_instance.max_content_pages = loaded_info["content_page_limit"]   
 
         return new_instance
 
