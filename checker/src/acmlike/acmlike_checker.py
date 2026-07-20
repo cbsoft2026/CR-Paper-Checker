@@ -276,7 +276,8 @@ class ACMLikeChecker():
             "correctly_named_keywords": False,
             "artifact_sec_pos": False,
             "correct_acks_title": True,
-            "portuguse_only_abstract": True
+            "portuguse_only_abstract": True,
+            "no_author_biographies" : True
         }
 
         outline_titles,_ = paper.get_outline() 
@@ -292,9 +293,13 @@ class ACMLikeChecker():
         for item_index in range(len(outline_titles)):
             item = outline_titles[item_index]
             first_char = item[0]
+            
             if item == item.upper():
                 outline_results["all_sections_lowercase"] = False
             
+            if re.search(paper_language.BIOGRAPHY_REGEX.value, item) is not None:
+                outline_results["no_author_biographies"] = False
+
             try:
                 _ = int(first_char)
                 # In this case, we're in a numbered section

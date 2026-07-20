@@ -29,6 +29,7 @@
         "acm_not_review" : "Remova a numeração de linhas (modo review) da versão camera-ready do artigo.",
         "content_pages" : "O conteúdo principal do artigo (excluindo referências) deve respeitar o limite de páginas imposto na chamada da trilha.",
         "total_pages" : "O artigo completo (incluindo referências) deve respeitar o limite de páginas na chamada da trilha.",
+        "no_author_biographies" : "O artigo não pode conter uma seção dedicada às biografias dos autores.",
 
         "abstract_link" : "O resumo deve incluir um link para a ferramenta apresentada no artigo."
     }

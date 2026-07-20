@@ -13,6 +13,7 @@ class Keywords_PT_BR(Enum):
     WRONG_ARTIFACTS = ("DISPONIBILIDADE DE ARTEFATO","DISPONIBILIDADE DE ARTEFATO", "Disponibilidade de Artefato")
     ACKS = "Agradecimentos"
     WRONG_ACKS = ("AGRADECIMENTO", "AGRADECIMENTOS", "Agradecimento")
+    BIOGRAPHY_REGEX = r'[Bb]iografia'
 
 class Keywords_EN(Enum):
     LANG_CODE = "EN"
@@ -23,5 +24,6 @@ class Keywords_EN(Enum):
     WRONG_ARTIFACTS = ("ARTIFACTS AVAILABILITY", "ARTIFACT AVAILABILITY")
     ACKS = "Acknowledgments"
     WRONG_ACKS = ("ACKNOWLEDGMENT", "ACKNOWLEDGMENTS", "Acknowledgement")
+    BIOGRAPHY_REGEX = r'[Bb]iograph'
 
 LANGUAGES = [Keywords_EN, Keywords_PT_BR]  

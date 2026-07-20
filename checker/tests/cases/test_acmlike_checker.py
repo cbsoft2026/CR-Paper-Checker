@@ -38,6 +38,8 @@ ACM_BARELY_NOT_OK_CONTENT = "/data/acm_barely_not_ok.pdf"
 ACM_LIKE_TEMPLATE_CBSOFT26 = "/data/template_26.pdf"
 ACK_WRONG_TITLE = "/data/acm_wrong_ack_title.pdf"
 ACM_PT_ABSTRACT_RESUMO = "/data/acm_pt_abstract.pdf"
+ACM_EN_BIOGRAPHIES = "/data/acm_en_biographies.pdf"
+ACM_PT_BIOGRAPHIES = "/data/acm_pt_biographies.pdf"
 
 def test_acm_ref_format(acm_checker): 
 
@@ -273,3 +275,12 @@ def test_pt_only_abstract(acm_checker):
 
     assert acm_checker.check_paper(ok_paper)["portuguse_only_abstract"]
     assert not acm_checker.check_paper(doubled_abstract_paper)["portuguse_only_abstract"]
+
+def test_no_author_biographies(acm_checker):
+    ok_paper = ParsedPaper.from_pdf(ACM_LIKE_TEMPLATE_CBSOFT26)
+    en_paper = ParsedPaper.from_pdf(ACM_EN_BIOGRAPHIES)
+    pt_paper = ParsedPaper.from_pdf(ACM_PT_BIOGRAPHIES)
+
+    assert acm_checker.check_paper(ok_paper)["no_author_biographies"]
+    assert not acm_checker.check_paper(en_paper)["no_author_biographies"]
+    assert not acm_checker.check_paper(pt_paper)["no_author_biographies"]
