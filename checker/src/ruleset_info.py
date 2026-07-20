@@ -36,7 +36,7 @@ class RuleSetInfo():
             if loaded_info is None:
                 print("No track configuration found for",track_name)
                 print("Please refer to the README and choose one of the tracks listed in the ruleset file", info_path[1:])
-                exit(1)
+                sys.exit(1)
             
         new_instance.rule_messages = ruleset_info["rules"]
 
@@ -80,3 +80,10 @@ class RuleSetInfo():
         """
 
         return self.rule_messages.get(check_key, None)
+
+    def get_all_active_checks(self) -> list[str]:
+        """
+        Returns a list with all the active checks for the current track.
+        """
+
+        return list(self.rule_messages.keys())

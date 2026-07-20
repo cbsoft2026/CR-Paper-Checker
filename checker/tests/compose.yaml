@@ -1,8 +1,8 @@
 services:
   tester:
     build:
-      context: ..
-      dockerfile: tests/Containerfile.tests
+      context: ../..
+      dockerfile: ./checker/tests/Containerfile.tests
     environment:
       DATA_DIR: "/data"
     user: "${UID}:${GID}"

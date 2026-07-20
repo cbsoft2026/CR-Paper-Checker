@@ -410,6 +410,13 @@ class ACMLikeChecker():
 
         return {"no_received_on_tags": True}
 
+    def get_tested_checks(self) -> list[str]:
+        """
+        Returns a list with all the active checks for the track of this checker.
+        """
+
+        return self.track_info.get_all_active_checks()
+
 def extract_authors_from_page_lines(page_lines: list[tuple[str,dict,float]]) -> list[dict]:
     """
     Given a list of tuples corresponding to lines of a page, collects author info.
