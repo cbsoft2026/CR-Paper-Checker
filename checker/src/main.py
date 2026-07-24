@@ -8,6 +8,7 @@ def main():
 
     single_paper = os.environ.get("CHECK_PAPER_AT")
     paper_batch = os.environ.get("CHECK_PAPERS_AT")
+    debug_paper = os.environ.get("DEBUG_PAPER_AT")
     
     checker = ACMLikeChecker(track)
 
@@ -15,6 +16,8 @@ def main():
         check_single_paper(checker,single_paper)
     elif paper_batch is not None:
         check_paper_batch(checker,paper_batch)
+    elif debug_paper is not None:
+        debug_paper_checking(checker,debug_paper)
     else:
         print("Please refer to the README file for instructions on how to invoke the checker script.")
     
@@ -50,20 +53,32 @@ def check_paper_batch(checker, batch_path):
         except:
             print("Ignoring file", paper_path)
             continue
+        print("Checking paper", paper_path)
         
         binary_results, helpful_message = checker.check_and_compose_instructions(parsed_paper)
         composite_results = {"paper": paper_path} | binary_results | {"message": helpful_message}
         all_results.append(composite_results)
 
-    save_batch_results(checker,"/data/"+batch_path+"_results.xlsx",all_results)
+    save_batch_results("/data/"+batch_path+"_results.xlsx",all_results)
 
-def save_batch_results(checker, output_path, all_results):
+def save_batch_results(output_path, all_results):
     """
     Saves the results of a given batch of papers checked to a csv file.
     """
 
     results_df = pd.DataFrame(all_results)
     results_df.to_excel(output_path, index=False, engine='openpyxl')
+
+def debug_paper_checking(checker, paper_path):
+    """
+    Run the checker on 'debug mode' with the paper in a given path.
+    """
+
+    checker.activate_debug_logs()
+
+    parsed_paper = ParsedPaper.from_pdf("/data/" + paper_path)
+    
+    print(checker.check_paper(parsed_paper))
 
 if __name__ == "__main__":
     main()

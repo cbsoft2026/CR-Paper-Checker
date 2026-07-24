@@ -20,12 +20,18 @@ class ACMLikeChecker():
     Class responsible for checking conformance to a ACM-like
     paper template.
 
-    TODO: Implement config system so tests/checks can be 
-    toggled on or off.
     """
 
     def __init__(self, track_name, testing=False):
+        self.debug_logs = False
         self.track_info = RuleSetInfo.load_track_by_name(track_name, testing=testing)
+
+    def activate_debug_logs(self):
+        """
+        Activates additional logs helpful for debugging the tool
+        """
+
+        self.debug_logs = True
 
     def check_paper(self, paper: ParsedPaper) -> dict:
         """
@@ -208,13 +214,13 @@ class ACMLikeChecker():
 
         authors_ok = True
         for line in even_header_lines:
-            if compute_line_length(line,PAGE_HEADER_FONT,header_font_size) > COLUMN_SIZE:
+            if compute_line_length(line,PAGE_HEADER_FONT[0],header_font_size) > COLUMN_SIZE:
                 authors_ok = False
                 break
 
         title_ok = True
         for line in odd_header_lines:
-            if compute_line_length(line,PAGE_HEADER_FONT,header_font_size) > COLUMN_SIZE:
+            if compute_line_length(line,PAGE_HEADER_FONT[0],header_font_size) > COLUMN_SIZE:
                 title_ok = False
                 break
         
@@ -260,7 +266,7 @@ class ACMLikeChecker():
             
             if line_content not in ("","\n"): #and :
                 line_font_family = line[1]["/BaseFont"][8:]
-                if line_font_family != PAGE_HEADER_FONT:
+                if line_font_family not in PAGE_HEADER_FONT:
                     page_limit_results["content_pages"] = False
                     return page_limit_results
 
@@ -310,7 +316,7 @@ class ACMLikeChecker():
                 word_by_word = item.split(' ')
                 not_numbered = ' '.join(word_by_word[1:])
 
-                if not english_written and not_numbered.lower() == paper_language.ABSTRACT.value.lower():
+                if not english_written and not_numbered.lower() == "abstract":
                     outline_results["portuguse_only_abstract"] = False
 
                 if not_numbered == not_numbered.upper():
@@ -326,7 +332,7 @@ class ACMLikeChecker():
 
                     arifact_index = item_index
             except:
-                if not english_written and item.lower() == paper_language.ABSTRACT.value.lower():
+                if not english_written and item.lower() == "abstract":
                     outline_results["portuguse_only_abstract"] = False
             
                 if acks_index == -1 and item == paper_language.ACKS.value:
@@ -380,6 +386,8 @@ class ACMLikeChecker():
             line_text = line[0]
             font_family = line[1]["/BaseFont"][8:]
             font_size = line[2]
+            if len(line_text) < 2:
+                continue
             if line_text[-1] == "\n" and line_text[-2] == "." and \
                 compute_line_length(line_text,font_family,font_size) < 0.9*COLUMN_SIZE: # This should false positives
                 one_single_paragraph =  False
@@ -443,12 +451,12 @@ def extract_authors_from_page_lines(page_lines: list[tuple[str,dict,float]]) -> 
         line_text = this_line[0]
         font_family = this_line[1]["/BaseFont"][8:]
 
-        if font_family == AUTHOR_BLOCK_FONT:
+        if font_family in AUTHOR_BLOCK_FONT:
             if line_text == "\n":
                 line_index +=1
                 continue
             next_line = page_lines[line_index]
-            if font_family != AUTHOR_BLOCK_FONT:
+            if font_family not in AUTHOR_BLOCK_FONT:
                 break
             authors_read.append({
                 "name" : next_line[0],
@@ -464,7 +472,8 @@ def extract_authors_from_page_lines(page_lines: list[tuple[str,dict,float]]) -> 
         elif len(authors_read) > 0:
             # In this case, I have read an author block and now it has come to an end
             break
-            
+        #else:
+        #    print(this_line)
         line_index += 1
 
     return authors_read
@@ -486,7 +495,7 @@ def extract_acm_paper_outline(paper: ParsedPaper) -> tuple[list[str],list[tuple[
             font_info = line[1]
             if font_info is None or len(line_text) < 2:
                 continue
-            if font_info["/BaseFont"][8:] == SECTION_TITLE_FONT and line[2] > SUBSECTION_FONT_SIZE:
+            if font_info["/BaseFont"][8:] in SECTION_TITLE_FONT and line[2] > SUBSECTION_FONT_SIZE:
                 outline_titles.append(line_text)
                 outline_pages.append((page_index,line_index))
 
@@ -507,7 +516,7 @@ def get_page_header_lines(paper: ParsedPaper, page_index: int) -> tuple[list[str
         if font_info is None:
             continue
         
-        if font_info["/BaseFont"][8:] == PAGE_HEADER_FONT:
+        if font_info["/BaseFont"][8:] in PAGE_HEADER_FONT:
             header_lines.append(line[0])
             size = line[2]
         else:
