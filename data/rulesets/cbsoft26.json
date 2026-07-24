@@ -1,25 +1,25 @@
 {
     "tracks": [{
         "name": "sbes_26_rt",
-        "conference_header": "SBES’26, September 08–11, 2026, São Paulo, SP",
+        "conference_header": "SBES 2026, September 8–11, 2026, São Paulo, SP, Brazil",
         "content_page_limit": 10,
         "total_page_limit": 12
     },  
     {
         "name": "sbes_26_education",
-        "conference_header": "SBES’26, September 08–11, 2026, São Paulo, SP",
+        "conference_header": "SBES 2026, September 8–11, 2026, São Paulo, SP, Brazil",
         "content_page_limit": 10,
         "total_page_limit": 12
     },  
     {
         "name": "sbes_26_iier",
-        "conference_header": "SBES’26, September 08–11, 2026, São Paulo, SP",
+        "conference_header": "SBES 2026, September 8–11, 2026, São Paulo, SP, Brazil",
         "content_page_limit": 6,
         "total_page_limit": 7
     },  
     {
         "name": "sbes_26_tools",
-        "conference_header": "SBES’26, September 08–11, 2026, São Paulo, SP",
+        "conference_header": "SBES 2026, September 8–11, 2026, São Paulo, SP, Brazil",
         "content_page_limit": 6,
         "total_page_limit": 7,
         "specific_rules": {
@@ -28,37 +28,37 @@
     },  
     {
         "name": "sblp_26_full",
-        "conference_header": "SBLP’26, September 08–11, 2026, São Paulo, SP",
+        "conference_header": "SBLP 2026, September 8–11, 2026, São Paulo, SP, Brazil",
         "content_page_limit": 9,
         "total_page_limit": 12
     },  
     {
         "name": "sblp_26_short",
-        "conference_header": "SBLP’26, September 08–11, 2026, São Paulo, SP",
+        "conference_header": "SBLP 2026, September 8–11, 2026, São Paulo, SP, Brazil",
         "content_page_limit": 5,
         "total_page_limit": 8
     },  
     {
         "name": "sbcars_26_full",
-        "conference_header": "SBCARS’26, September 08–11, 2026, São Paulo, SP",
+        "conference_header": "SBCARS 2026, September 8–11, 2026, São Paulo, SP, Brazil",
         "content_page_limit": 10,
         "total_page_limit": 12
     },
     {
         "name": "sbcars_26_short",
-        "conference_header": "SBCARS’26, September 08–11, 2026, São Paulo, SP",
+        "conference_header": "SBCARS 2026, September 8–11, 2026, São Paulo, SP, Brazil",
         "content_page_limit": 4,
         "total_page_limit": 6
     },
     {
         "name": "sast_26_full",
-        "conference_header": "SAST’26, September 08–11, 2026, São Paulo, SP",
+        "conference_header": "SAST 2026, September 8–11, 2026, São Paulo, SP, Brazil",
         "content_page_limit": 10,
         "total_page_limit": 10
     },
     {
         "name": "sast_26_short",
-        "conference_header": "SAST’26, September 08–11, 2026, São Paulo, SP",
+        "conference_header": "SAST 2026, September 8–11, 2026, São Paulo, SP, Brazil",
         "content_page_limit": 3,
         "total_page_limit": 3
     }],
