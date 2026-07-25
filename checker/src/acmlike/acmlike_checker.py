@@ -455,15 +455,20 @@ def extract_authors_from_page_lines(page_lines: list[tuple[str,dict,float]]) -> 
             if line_text == "\n":
                 line_index +=1
                 continue
-            next_line = page_lines[line_index]
-            if font_family not in AUTHOR_BLOCK_FONT:
-                break
+
+            new_name = page_lines[line_index][0]
+            line_index += 1
+            while page_lines[line_index][0] != "\n":
+                new_name += page_lines[line_index][0]
+                line_index += 1
+
             authors_read.append({
-                "name" : next_line[0],
+                "name" : new_name,
                 "info" : []
             })
 
-            line_index = line_index + 2 # Skipping newline here
+            line_index += 1 # Skipping newline here
+            
             while page_lines[line_index][0] != "\n":
                 authors_read[-1]["info"].append(page_lines[line_index][0])
                 line_index += 1

@@ -40,6 +40,7 @@ ACK_WRONG_TITLE = "/data/acm_wrong_ack_title.pdf"
 ACM_PT_ABSTRACT_RESUMO = "/data/acm_pt_abstract.pdf"
 ACM_EN_BIOGRAPHIES = "/data/acm_en_biographies.pdf"
 ACM_PT_BIOGRAPHIES = "/data/acm_pt_biographies.pdf"
+ACM_LONG_AUTHOR_NAME = "/data/acm_long_author_name.pdf"
 
 def test_acm_ref_format(acm_checker): 
 
@@ -121,11 +122,14 @@ def test_acm_invalid_author_blocks(acm_checker):
 def test_acm_author_email(acm_checker):
     invalid_author_email = ParsedPaper.from_pdf(INVALID_AUTHOR_EMAIL)
     ok_author_email = ParsedPaper.from_pdf(ACM_CCS_CONCEPTS_MOCK_PATH)
+    ok_long_author_name = ParsedPaper.from_pdf(ACM_LONG_AUTHOR_NAME)
     invalid_email_results = acm_checker.check_paper(invalid_author_email)
     ok_results = acm_checker.check_paper(ok_author_email)
+    long_results = acm_checker.check_paper(ok_long_author_name)
 
     assert not invalid_email_results["author_emails"] 
     assert ok_results["author_emails"] 
+    assert long_results["author_emails"]
 
 def test_numbered_sections_not_uppercase(acm_checker):
     uppercase_sections_paper = ParsedPaper.from_pdf(WRONG_CONF_MOCK_PATH)
