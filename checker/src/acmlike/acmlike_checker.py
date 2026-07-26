@@ -244,8 +244,6 @@ class ACMLikeChecker():
         last_item_label = paper.get_outline()[0][-1]
         paper_language = paper.get_language()
 
-        #print(paper.get_outline())
-
         if last_item_page  + 1 <= self.track_info.get_track_content_pages_limit():
             return page_limit_results
 
@@ -253,7 +251,7 @@ class ACMLikeChecker():
             page_limit_results["content_pages"] = False
             return page_limit_results
 
-        if last_item_label != paper_language.REFERENCES.value:
+        if last_item_label.upper() != paper_language.REFERENCES.value:
             # In this case, the paper seems to have an appendix or another section following the references
             # The test fails, and requires manual inspection on whether the content limits are being respected. 
             page_limit_results["content_pages"] = False       
@@ -391,7 +389,7 @@ class ACMLikeChecker():
             if len(line_text) < 2:
                 continue
             if line_text[-1] == "\n" and line_text[-2] == "." and \
-                compute_line_length(line_text,font_family,font_size) < 0.9*COLUMN_SIZE: # This should false positives
+                compute_line_length(line_text,font_family,font_size) < 0.9*COLUMN_SIZE: # This should help with false positives
                 one_single_paragraph =  False
                 break
         
