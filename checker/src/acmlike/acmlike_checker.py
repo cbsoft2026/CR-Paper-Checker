@@ -284,7 +284,7 @@ class ACMLikeChecker():
             "correct_artifact_section" : False,
             "correctly_named_abstract" : False,
             "correctly_named_keywords": False,
-            "artifact_sec_pos": False,
+            "artifact_sec_pos": True,
             "correct_acks_title": True,
             "portuguse_only_abstract": True,
             "no_author_biographies" : True
@@ -293,7 +293,9 @@ class ACMLikeChecker():
         outline_titles,_ = paper.get_outline() 
         paper_language = paper.get_language()
         acks_index = -1
-        arifact_index = -1
+        artifact_index = -1
+        references_index = -1
+        last_numbered = -1
 
         if paper_language is None:
             return outline_results
@@ -315,6 +317,7 @@ class ACMLikeChecker():
                 # In this case, we're in a numbered section
                 word_by_word = item.split(' ')
                 not_numbered = ' '.join(word_by_word[1:])
+                last_numbered = item_index
 
                 if not english_written and not_numbered.lower() == "abstract":
                     outline_results["portuguse_only_abstract"] = False
@@ -330,7 +333,7 @@ class ACMLikeChecker():
                 elif not_numbered == paper_language.ARTIFACTS.value or \
                     not_numbered in paper_language.WRONG_ARTIFACTS.value:
 
-                    arifact_index = item_index
+                    artifact_index = item_index
             except:
                 if not english_written and item.lower() == "abstract":
                     outline_results["portuguse_only_abstract"] = False
@@ -340,23 +343,22 @@ class ACMLikeChecker():
                 elif acks_index == -1 and item in paper_language.WRONG_ACKS.value:
                     outline_results["correct_acks_title"] = False
                     acks_index = item_index
-                elif arifact_index == -1 and item == paper_language.ARTIFACTS.value:
+                elif artifact_index == -1 and item == paper_language.ARTIFACTS.value:
                     outline_results["correct_artifact_section"] = True
-                    arifact_index = item_index
-                elif arifact_index == -1 and item in paper_language.WRONG_ARTIFACTS.value:
-                    arifact_index = item_index
-        
-        if arifact_index > -1:
-            if acks_index > -1:
-                if acks_index != arifact_index + 1: # Artifact must precede acks
-                    outline_results["artifact_sec_pos"] = False
-                else:
-                    # And acks must precede refs
-                    acks_followed_by_refs = outline_titles[acks_index+1] == paper_language.REFERENCES.value
-                    outline_results["artifact_sec_pos"] = acks_followed_by_refs
-            else: #If there are no acks, the artifact must be the last section here
-                artifact_followed_by_refs = outline_titles[arifact_index+1] == paper_language.REFERENCES.value
-                outline_results["artifact_sec_pos"] = artifact_followed_by_refs
+                    artifact_index = item_index
+                elif artifact_index == -1 and item in paper_language.WRONG_ARTIFACTS.value:
+                    artifact_index = item_index
+                elif references_index == -1 and item.upper() == paper_language.REFERENCES.value:
+                    references_index = item_index
+
+        if artifact_index > -1:
+            artifact_precedes_refs = artifact_index < references_index
+            no_numbered_sec_after_acks = artifact_index > last_numbered
+            outline_results["artifact_sec_pos"] = artifact_precedes_refs and no_numbered_sec_after_acks
+
+            if acks_index > -1: # Artifact must also precede acks
+                artifact_followed_by_acks = artifact_index < acks_index 
+                outline_results["artifact_sec_pos"] = outline_results["artifact_sec_pos"] and artifact_followed_by_acks
 
         outline_results["correctly_named_abstract"] = paper_language.ABSTRACT.value in outline_titles
         outline_results["correctly_named_keywords"] = paper_language.KEYWORDS.value in outline_titles

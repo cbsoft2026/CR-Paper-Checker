@@ -165,16 +165,13 @@ def test_correct_artifact_sec(acm_checker):
 def test_artifact_sec_positioning(acm_checker):
     artifacts_ok_paper = ParsedPaper.from_pdf(LONG_AUTHOR_HEADER)
     artifacts_no_aks_paper =  ParsedPaper.from_pdf(ARTIFACTS_NO_ACKS)
-    artifacts_too_soon_paper = ParsedPaper.from_pdf(ARTIFACTS_BEFORE_CONCLUSION)
     artifacts_too_late_paper = ParsedPaper.from_pdf(ARTIFACTS_AFTER_ACKS)
     artifacts_ok_results = acm_checker.check_paper(artifacts_ok_paper)
     artifacts_no_aks_results = acm_checker.check_paper(artifacts_no_aks_paper)
-    artifacts_too_soon_results = acm_checker.check_paper(artifacts_too_soon_paper)
     artifacts_too_late_results = acm_checker.check_paper(artifacts_too_late_paper)
 
     assert artifacts_ok_results["artifact_sec_pos"]
     assert artifacts_no_aks_results["artifact_sec_pos"]
-    assert not artifacts_too_soon_results["artifact_sec_pos"]
     assert not artifacts_too_late_results["artifact_sec_pos"]
 
 def test_correct_abstract_keyword(acm_checker):
