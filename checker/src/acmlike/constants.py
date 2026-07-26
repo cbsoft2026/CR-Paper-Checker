@@ -9,4 +9,4 @@ SECTION_TITLE_FONT = ("LinLibertineTB","CMBX10") #This second is a bit weird
 #TABLE_CAPTION_FONT = "LinLibertineTB"
 
 SUBSECTION_FONT_SIZE = 10.0
-COLUMN_SIZE = 220
+COLUMN_SIZE = 218
