@@ -44,6 +44,7 @@ class RuleSetInfo():
             new_instance.rule_messages = new_instance.rule_messages | loaded_info["specific_rules"]
         
         new_instance.track_name = loaded_info["name"]
+        new_instance.wrong_names = loaded_info.get("common_track_misspells",[])
         new_instance.track_header = loaded_info["conference_header"]
         new_instance.max_paper_pages = loaded_info["total_page_limit"]
         new_instance.max_content_pages = loaded_info["content_page_limit"]   
@@ -56,6 +57,15 @@ class RuleSetInfo():
         """
 
         return self.track_header
+
+    def get_common_track_misspellings(self):
+        """
+        Returns a list of common misspellings of the track's title/header. This optional ruleset field
+        helps the checker proceed with short title + short authors validation even if the track
+        header is wrong.
+        """
+
+        return self.wrong_names
 
     def get_track_total_pages_limit(self):
         """

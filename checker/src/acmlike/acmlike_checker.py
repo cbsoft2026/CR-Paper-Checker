@@ -187,6 +187,7 @@ class ACMLikeChecker():
         }
 
         expected_header = self.track_info.get_track_header()
+        track_mispelled = False
 
         even_header_lines,_ = get_page_header_lines(paper,1)
         odd_header_lines, header_font_size = get_page_header_lines(paper,2) # This line assumes we're only treating papers with more than 2 pages
@@ -200,14 +201,23 @@ class ACMLikeChecker():
         #  Purposely left in this redundant form, so future maintainers
         #   can remove the second clause if they so desire.
         if conf_index_on_even_page < 0 or conf_index_on_even_page > 0:
-            return header_results
+            # Maybe the authors used the wrong conference info. Let's check for some
+            # common misspellings based on the track ruleset info.
+            for common_misspell in self.track_info.get_common_track_misspellings():
+                conf_index_on_even_page = even_header_lines[0].find(common_misspell)
+                if conf_index_on_even_page == 0:
+                    track_mispelled = True
+                    expected_header = common_misspell
+                    
+            if not track_mispelled:
+                return header_results
         
         conf_index_on_odd_page = odd_header_lines[-1].find(expected_header)
 
         if conf_index_on_odd_page < 0:
             return header_results
 
-        header_results["conf_header"] = True
+        header_results["conf_header"] = not track_mispelled
 
         even_header_lines[0] = even_header_lines[0][len(expected_header):]
         odd_header_lines[-1] = odd_header_lines[-1][0:conf_index_on_odd_page]

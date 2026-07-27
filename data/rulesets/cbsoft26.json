@@ -2,24 +2,28 @@
     "tracks": [{
         "name": "sbes_26_rt",
         "conference_header": "SBES 2026, September 8–11, 2026, São Paulo, SP, Brazil",
+        "common_track_misspells" : ["SBES 2026, September 8–12, 2026, São Paulo, SP, Brazil"],
         "content_page_limit": 10,
         "total_page_limit": 12
     },  
     {
         "name": "sbes_26_education",
         "conference_header": "SBES 2026, September 8–11, 2026, São Paulo, SP, Brazil",
+        "common_track_misspells" : ["SBES 2026, September 8–12, 2026, São Paulo, SP, Brazil"],
         "content_page_limit": 10,
         "total_page_limit": 12
     },  
     {
         "name": "sbes_26_iier",
         "conference_header": "SBES 2026, September 8–11, 2026, São Paulo, SP, Brazil",
+        "common_track_misspells" : ["SBES 2026, September 8–12, 2026, São Paulo, SP, Brazil"],
         "content_page_limit": 6,
         "total_page_limit": 7
     },  
     {
         "name": "sbes_26_tools",
         "conference_header": "SBES 2026, September 8–11, 2026, São Paulo, SP, Brazil",
+        "common_track_misspells" : ["SBES 2026, September 8–12, 2026, São Paulo, SP, Brazil"],
         "content_page_limit": 6,
         "total_page_limit": 7,
         "specific_rules": {
