@@ -11,8 +11,8 @@ sys.path.append(str(Path(__file__).absolute().parent.parent.parent))
 
 from src.parsed_paper import ParsedPaper
 from src.constants import FONT_DATA_DIR
-from src.acmlike.constants import PAGE_HEADER_FONT, \
-    AUTHOR_BLOCK_FONT, SECTION_TITLE_FONT, COLUMN_SIZE, SUBSECTION_FONT_SIZE
+from src.acmlike.constants import PAGE_HEADER_FONT, PLACEHOLDER_SHORTAUTHORS_SUBSTRING,\
+    PLACEHOLDER_SHORTTILE_SUBSTRING, AUTHOR_BLOCK_FONT, SECTION_TITLE_FONT, COLUMN_SIZE, SUBSECTION_FONT_SIZE
 from src.ruleset_info import RuleSetInfo
 
 class ACMLikeChecker():
@@ -224,13 +224,15 @@ class ACMLikeChecker():
 
         authors_ok = True
         for line in even_header_lines:
-            if compute_line_length(line,PAGE_HEADER_FONT[0],header_font_size) > COLUMN_SIZE:
+            if  PLACEHOLDER_SHORTAUTHORS_SUBSTRING in line or \
+                    compute_line_length(line,PAGE_HEADER_FONT[0],header_font_size) > COLUMN_SIZE:
                 authors_ok = False
                 break
 
         title_ok = True
         for line in odd_header_lines:
-            if compute_line_length(line,PAGE_HEADER_FONT[0],header_font_size) > COLUMN_SIZE:
+            if  PLACEHOLDER_SHORTTILE_SUBSTRING in line or \
+                    compute_line_length(line,PAGE_HEADER_FONT[0],header_font_size) > COLUMN_SIZE:
                 title_ok = False
                 break
         

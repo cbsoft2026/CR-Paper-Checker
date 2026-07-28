@@ -2,6 +2,7 @@
     "tracks": [{
         "name": "sbes_26_rt",
         "conference_header": "SBES’26, September 08–12, 2026, São Paulo, SP",
+        "common_track_misspells" : ["SBES 2026, September 8–11, 2026, São Paulo, SP, Brazil"],
         "content_page_limit": 4,
         "total_page_limit": 5
     },

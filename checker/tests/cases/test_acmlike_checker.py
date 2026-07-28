@@ -17,6 +17,7 @@ ACM_CCS_CONCEPTS_MOCK_PATH = "/data/acm_ccs_concepts.pdf"
 WRONG_CONF_MOCK_PATH = "/data/mock2.pdf"
 LONG_AUTHOR_HEADER = "/data/long_author_header.pdf"
 LONG_TITLE_HEADER = "/data/long_title_header.pdf"
+OK_TITLE_HEADER = "/data/acm_barely_not_ok.pdf"
 ANONYMOUS_AUTHORS_MOCK = "/data/acm_anonymous.pdf"
 INVALID_AUTHOR_BLOCKS = "/data/acm_invalid_auth_block.pdf"
 INVALID_AUTHOR_EMAIL = "/data/acm_missing_email.pdf"
@@ -91,21 +92,27 @@ def test_acm_conf_header(acm_checker):
 
 def test_acm_long_shorttitle_header(acm_checker):
     long_title_header = ParsedPaper.from_pdf(LONG_TITLE_HEADER)
-    ok_title_header = ParsedPaper.from_pdf(LONG_AUTHOR_HEADER)
+    ok_title_header = ParsedPaper.from_pdf(OK_TITLE_HEADER)
+    placeholder_title_paper = ParsedPaper.from_pdf(ACM_LIKE_TEMPLATE_CBSOFT26)
     long_title_results = acm_checker.check_paper(long_title_header)
     ok_title_results = acm_checker.check_paper(ok_title_header)
+    placeholder_title_results = acm_checker.check_paper(placeholder_title_paper)
 
     assert not long_title_results["short_title_header"]
     assert ok_title_results["short_title_header"]
+    assert not placeholder_title_results["short_title_header"]
 
-def test_acm_long_shorauthors_header(acm_checker):
+def test_acm_long_shortauthors_header(acm_checker):
     long_authors_header = ParsedPaper.from_pdf(LONG_AUTHOR_HEADER)
     ok_authors_header = ParsedPaper.from_pdf(LONG_TITLE_HEADER)
+    placeholder_authors_paper = ParsedPaper.from_pdf(ACM_LIKE_TEMPLATE_CBSOFT26)
     long_authors_results = acm_checker.check_paper(long_authors_header)
     ok_authors_results = acm_checker.check_paper(ok_authors_header)
+    placeholder_authors_results = acm_checker.check_paper(placeholder_authors_paper)
 
     assert not long_authors_results["short_authors_header"]
     assert ok_authors_results["short_authors_header"]
+    assert not placeholder_authors_results["short_authors_header"]
    
 def test_acm_invalid_author_blocks(acm_checker):
     invalid_author_blocks = ParsedPaper.from_pdf(INVALID_AUTHOR_BLOCKS)
