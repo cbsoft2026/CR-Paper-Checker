@@ -1,27 +1,24 @@
 # Camera Ready Template Conformance Checker 
 ### by the CBSoft'26 Proceedings Co-Chairs
 
-Tooling made to ease the manual validation of the camera ready papers accepted at the CBSoft symposia and workshops, responsible for checking whether the papers conform to the template expeted by the proceedings team.
+Tooling made to ease the manual validation of the camera-ready papers accepted at the CBSoft symposia and workshops, responsible for checking whether the papers conform to the template expected by the proceedings team.
 
-As it would be interesting to have a tool that substitutes the manual paper validation process long practiced by the Proceedings teams of the CBSoft conference series, the current repo includes an incipient tool serving as a first step in that direction. The tool suplements manual validation by programatically asserting most camera-ready checks and helps Proceedings Co-Chairs identify and instruct authors with non-confirming papers.
+As it would be interesting to have a tool that substitutes the manual paper validation process long practiced by the Proceedings teams of the CBSoft conference series, the current repo includes an incipient tool serving as a first step in that direction. The tool supplements manual validation by programmatically asserting most camera-ready checks and helps Proceedings Co-Chairs identify and instruct authors with non-confirming papers.
 
 ## Known Limitations
 
 Currently, the implemented version of the checker has a couple of known limitations: checks that tend to wrongly point to a failing condition, or conditions that are not yet implemented. Users of the tool should be aware of such limitations and pay extra attention to the conditions with known limitations. These are:
 
-- `one_paragraph_on_abstract`, the test checking whether the paper's abstract is contained in a single paragraph. Currently falsely detecting an error on 8% of conforming papers.
-- `all_sections_lowercase`, the test checking whether the paper's section headings are all in title casing. Currently falsely detecting an error on 5.3% of conforming papers. Possibly due to titles with italic substrings and acronyms.
-- `short_authors_header`, the test checking whether the paper contains an appropriate "short authors" value, for a column header not exceeding columns width.Currently falsely detecting an error on 5% of conforming papers.
+- `one_paragraph_on_abstract`, the test checks whether the paper's abstract is contained in a single paragraph. Currently falsely detecting an error on 8% of conforming papers.
+- `all_sections_lowercase`, the test checks whether the paper's section headings are all in title casing. Currently falsely detecting an error on 5.3% of conforming papers. Possibly due to titles with italic substrings and acronyms.
+- `short_authors_header`, the test checking whether the paper contains an appropriate "short authors" value, for a column header not exceeding the column width. Currently falsely detecting an error on 5% of conforming papers.
 
-Most notably, the tool is not currently adapted to work with pdfs from papers creted wiht the Word CBSoft ACMLike template, and only works for papers compiled from the LaTeX template. 
+Most notably, the tool is not currently adapted to work with pdfs from papers created with the Word CBSoft ACM-Like template, and only works for papers compiled from the LaTeX template. 
 
 Moreover, some tests are not yet implemented by the tool. Including
 - Testing whether Figure captions are strictly below figures.
 - Testing whether Table captions are strictly above aboves.
-- Testing whether there are not any colored links and hyperlinks in the PDF.
-
-
-
+- Testing whether there are no colored links and hyperlinks in the pdf.
 
 ## Installation
 
@@ -37,7 +34,7 @@ A file in the `data/ruleset/` includes information on the constraints to be chec
 
 ## Checking a Single Paper
 
-In order to check whether a single paper (possibly yours) conforms to the rules of any specific track, first ensure the a copy of paper's pdf is available in the `data/` directory.
+In order to check whether a single paper (possibly yours) conforms to the rules of any specific track, first ensure a copy of the paper's pdf is available in the `data/` directory.
 
 Then, invoke the checker container by adapting the following line and executing it at the project's root dir (the one this README finds itself in):
 ```(bash)
@@ -66,7 +63,7 @@ The results are saved under the `data/` directory. For a batch saved in `data/ba
 
 Run the tests associated with the checker script by running `docker compose up` in the `checker/tests` directory.
 
-If you intend to use the return code of the tests as part of an automated pipeline CI/CD pipeline, consider running the test container as follows:
+If you intend to use the return code of the tests as part of an automated CI/CD pipeline, consider running the test container as follows:
 
 ```(bash)
 $> docker compose up --exit-code-from tester
@@ -74,12 +71,12 @@ $> docker compose up --exit-code-from tester
 
 ### Debugging
 
-When debugging, consider running a shell inside the checker container. To do so, make sure the `stdin_open:true` option in the `checker/compose.yaml` file is uncommented, and comment the `comand` line:
+When debugging, consider running a shell inside the checker container. To do so, make sure the `stdin_open:true` option in the `checker/compose.yaml` file is uncommented, and comment the `command` line:
 
 ```
-    [...]
-    stdin_open: true
-    #command: ["python3", "src/main.py"]
+ [...]
+ stdin_open: true
+ #command: ["python3", "src/main.py"]
 ```
 
 After running `docker compose up`, the main script will not run automatically. Instead, open a bash shell inside the container:
@@ -88,4 +85,4 @@ After running `docker compose up`, the main script will not run automatically. I
 $> docker exec -it template_checker-checker-1  /bin/bash
 ```
 
-The same debugging techique applies to the `tester` container.
+The same debugging technique applies to the `tester` container.
