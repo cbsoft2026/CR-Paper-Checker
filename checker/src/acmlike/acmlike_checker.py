@@ -77,12 +77,11 @@ class ACMLikeChecker():
         ignored_keys = set()
 
         for check_key, check_value in check_results.items():
-            if check_value:
-                continue
 
             resulting_message = self.track_info.get_check_message_if_existent(check_key)
             if resulting_message is not None:
-                composite_string += " - " + resulting_message + "\n"
+                if not check_value:
+                    composite_string += " - " + resulting_message + "\n"
             else:
                 ignored_keys.add(check_key)
                 
@@ -334,6 +333,7 @@ class ACMLikeChecker():
 
                 if not_numbered == not_numbered.upper():
                     outline_results["numbered_sections_lowercase"] = False
+                    outline_results["all_sections_lowercase"] = False
 
                 if not_numbered == paper_language.ACKS.value or \
                     not_numbered in paper_language.WRONG_ACKS.value: 
