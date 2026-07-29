@@ -3,6 +3,26 @@
 
 Tooling made to ease the manual validation of the camera ready papers accepted at the CBSoft symposia and workshops, responsible for checking whether the papers conform to the template expeted by the proceedings team.
 
+As it would be interesting to have a tool that substitutes the manual paper validation process long practiced by the Proceedings teams of the CBSoft conference series, the current repo includes an incipient tool serving as a first step in that direction. The tool suplements manual validation by programatically asserting most camera-ready checks and helps Proceedings Co-Chairs identify and instruct authors with non-confirming papers.
+
+## Known Limitations
+
+Currently, the implemented version of the checker has a couple of known limitations: checks that tend to wrongly point to a failing condition, or conditions that are not yet implemented. Users of the tool should be aware of such limitations and pay extra attention to the conditions with known limitations. These are:
+
+- `one_paragraph_on_abstract`, the test checking whether the paper's abstract is contained in a single paragraph. Currently falsely detecting an error on 8% of conforming papers.
+- `all_sections_lowercase`, the test checking whether the paper's section headings are all in title casing. Currently falsely detecting an error on 5.3% of conforming papers. Possibly due to titles with italic substrings and acronyms.
+- `short_authors_header`, the test checking whether the paper contains an appropriate "short authors" value, for a column header not exceeding columns width.Currently falsely detecting an error on 5% of conforming papers.
+
+Most notably, the tool is not currently adapted to work with pdfs from papers creted wiht the Word CBSoft ACMLike template, and only works for papers compiled from the LaTeX template. 
+
+Moreover, some tests are not yet implemented by the tool. Including
+- Testing whether Figure captions are strictly below figures.
+- Testing whether Table captions are strictly above aboves.
+- Testing whether there are not any colored links and hyperlinks in the PDF.
+
+
+
+
 ## Installation
 
 The script assumes you have access to `docker-compose` or an alternative container orchestration framework (such as `podman`). 
