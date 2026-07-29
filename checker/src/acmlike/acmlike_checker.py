@@ -221,19 +221,8 @@ class ACMLikeChecker():
         even_header_lines[0] = even_header_lines[0][len(expected_header):]
         odd_header_lines[-1] = odd_header_lines[-1][0:conf_index_on_odd_page]
 
-        authors_ok = True
-        for line in even_header_lines:
-            if  PLACEHOLDER_SHORTAUTHORS_SUBSTRING in line or \
-                    compute_line_length(line,PAGE_HEADER_FONT[0],header_font_size) > COLUMN_SIZE:
-                authors_ok = False
-                break
-
-        title_ok = True
-        for line in odd_header_lines:
-            if  PLACEHOLDER_SHORTTILE_SUBSTRING in line or \
-                    compute_line_length(line,PAGE_HEADER_FONT[0],header_font_size) > COLUMN_SIZE:
-                title_ok = False
-                break
+        authors_ok = is_short_header_ok(even_header_lines, PLACEHOLDER_SHORTAUTHORS_SUBSTRING, header_font_size)
+        title_ok = is_short_header_ok(odd_header_lines, PLACEHOLDER_SHORTTILE_SUBSTRING, header_font_size)
         
         header_results["short_authors_header"] = authors_ok
         header_results["short_title_header"] = title_ok
@@ -559,3 +548,21 @@ def compute_line_length(line: str, font_family: str, font_size: float) -> float:
     width = loaded_font.getlength(line)
 
     return width
+
+def is_short_header_ok(line_set: list[str],placeholder_val: str, header_font_size: float) -> bool:
+    """
+    Checks whether a given set of lines contains an adequately formatted short title or header
+    """
+
+    full_value = ""
+    for line in line_set:
+        full_value += line
+
+        if  placeholder_val in line or \
+                compute_line_length(line,PAGE_HEADER_FONT[0],header_font_size) > COLUMN_SIZE:
+            return False
+        
+    if not re.search(r"[A-Za-z]", full_value):
+        return False
+
+    return True

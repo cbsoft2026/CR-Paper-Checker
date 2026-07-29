@@ -42,6 +42,7 @@ ACM_PT_ABSTRACT_RESUMO = "/data/acm_pt_abstract.pdf"
 ACM_EN_BIOGRAPHIES = "/data/acm_en_biographies.pdf"
 ACM_PT_BIOGRAPHIES = "/data/acm_pt_biographies.pdf"
 ACM_LONG_AUTHOR_NAME = "/data/acm_long_author_name.pdf"
+EMPTY_SHORT_AUTHOR_TITLE = "/data/empty_short_star.pdf"
 
 def test_acm_ref_format(acm_checker): 
 
@@ -94,25 +95,31 @@ def test_acm_long_shorttitle_header(acm_checker):
     long_title_header = ParsedPaper.from_pdf(LONG_TITLE_HEADER)
     ok_title_header = ParsedPaper.from_pdf(OK_TITLE_HEADER)
     placeholder_title_paper = ParsedPaper.from_pdf(ACM_LIKE_TEMPLATE_CBSOFT26)
+    empty_title_paper = ParsedPaper.from_pdf(EMPTY_SHORT_AUTHOR_TITLE)
     long_title_results = acm_checker.check_paper(long_title_header)
     ok_title_results = acm_checker.check_paper(ok_title_header)
     placeholder_title_results = acm_checker.check_paper(placeholder_title_paper)
+    empty_title_results = acm_checker.check_paper(empty_title_paper)
 
     assert not long_title_results["short_title_header"]
     assert ok_title_results["short_title_header"]
     assert not placeholder_title_results["short_title_header"]
+    assert not empty_title_results["short_title_header"]
 
 def test_acm_long_shortauthors_header(acm_checker):
     long_authors_header = ParsedPaper.from_pdf(LONG_AUTHOR_HEADER)
     ok_authors_header = ParsedPaper.from_pdf(LONG_TITLE_HEADER)
     placeholder_authors_paper = ParsedPaper.from_pdf(ACM_LIKE_TEMPLATE_CBSOFT26)
+    empty_authors_paper = ParsedPaper.from_pdf(EMPTY_SHORT_AUTHOR_TITLE)
     long_authors_results = acm_checker.check_paper(long_authors_header)
     ok_authors_results = acm_checker.check_paper(ok_authors_header)
     placeholder_authors_results = acm_checker.check_paper(placeholder_authors_paper)
+    empty_authors_results = acm_checker.check_paper(empty_authors_paper)
 
     assert not long_authors_results["short_authors_header"]
     assert ok_authors_results["short_authors_header"]
     assert not placeholder_authors_results["short_authors_header"]
+    assert not empty_authors_results["short_authors_header"]
    
 def test_acm_invalid_author_blocks(acm_checker):
     invalid_author_blocks = ParsedPaper.from_pdf(INVALID_AUTHOR_BLOCKS)
