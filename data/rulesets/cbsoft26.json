@@ -68,6 +68,7 @@
     }],
 
     "rules": {
+        "correct_fonts" : "O PDF do artigo não contém as famílias de fontes padrão do template. É possível que a família de fontes Libertine não esteja instalada no sistema. Consulte https://ctan.org/pkg/libertine?lang=en.",
         "acm_ccs_concepts" : "O artigo não pode conter os 'CCS Concepts' do template padrão da ACM.\nRemova a o bloco CCSXML e o comando \\ccsdesc",
         "acm_footnote" : "O artigo não pode conter o disclaimer de Copyright do template padrão da ACM.",
         "acm_ref_format" : "O artigo não pode conter o 'ACM Reference Format' do template padrão da ACM.",

@@ -13,7 +13,7 @@ from src.parsed_paper import ParsedPaper
 from src.constants import FONT_DATA_DIR
 from src.acmlike.constants import PAGE_HEADER_FONT, PLACEHOLDER_SHORTAUTHORS_SUBSTRING,\
     PLACEHOLDER_SHORTTILE_SUBSTRING, AUTHOR_BLOCK_FONT, SECTION_TITLE_FONT, COLUMN_SIZE, \
-    SUBSECTION_FONT_SIZE, ABSTRACT_FONT
+    SUBSECTION_FONT_SIZE, ABSTRACT_FONT, CORRECT_TEMPLATE_FONT
 from src.ruleset_info import RuleSetInfo
 
 class ACMLikeChecker():
@@ -107,11 +107,19 @@ class ACMLikeChecker():
             return {"acm_latex_template" : False,
                     "acm_not_review": True}
         else:
-            first_lines = paper.get_all_pages()[0][:3]
+            first_lines = paper.get_all_pages()[0][:25]
             compiled_on_review = False
+            correct_fonts = True
             if first_lines[1][0][0] == '1' and first_lines[2][0][0] == '2':
                 compiled_on_review = True
+
+            for line in first_lines:
+                _, font_info, font_size = line
+                if font_size <= SUBSECTION_FONT_SIZE and font_info["/BaseFont"][8:] not in CORRECT_TEMPLATE_FONT:
+                    correct_fonts = False
+
             return {"acm_latex_template" : True,
+                    "correct_fonts" : correct_fonts,
                     "acm_not_review": not compiled_on_review}
 
     def _check_no_ACM_elements(self, paper: ParsedPaper) -> dict:
