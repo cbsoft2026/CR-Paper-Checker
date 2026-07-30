@@ -29,7 +29,13 @@
         "specific_rules": {
             "abstract_link" : "O resumo deve incluir um link para a ferramenta apresentada no artigo."
         }
-    },  
+    },{
+        "name": "sbes_26_industry",
+        "conference_header": "SBES 2026, September 8–11, 2026, São Paulo, SP, Brazil",
+        "common_track_misspells" : ["SBES 2026, September 8–12, 2026, São Paulo, SP, Brazil"],
+        "content_page_limit": 4,
+        "total_page_limit": 4
+    }, 
     {
         "name": "sblp_26_full",
         "conference_header": "SBLP 2026, September 8–11, 2026, São Paulo, SP, Brazil",
