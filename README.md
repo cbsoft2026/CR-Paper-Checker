@@ -12,6 +12,7 @@ Currently, the implemented version of the checker has a couple of known limitati
 - `one_paragraph_on_abstract`, the test checks whether the paper's abstract is contained in a single paragraph. Currently falsely detecting an error on 8% of conforming papers.
 - `all_sections_lowercase`, the test checks whether the paper's section headings are all in title casing. Currently falsely detecting an error on 5.3% of conforming papers. Possibly due to titles with italic substrings and acronyms.
 - `short_authors_header`, the test checking whether the paper contains an appropriate "short authors" value, for a column header not exceeding the column width. Currently falsely detecting an error on 5% of conforming papers.
+- `content_pages`, the test checks whether the paper's content respects the track limits. Currently detects an error if the paper includes appendixes, prompting a manual validation in such a case to ensure whether the appendixes contents summed to the main contents do respect the track limits. 
 
 Most notably, the tool is not currently adapted to work with pdfs from papers created with the Word CBSoft ACM-Like template, and only works for papers compiled from the LaTeX template. 
 

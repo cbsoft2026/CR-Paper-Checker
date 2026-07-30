@@ -12,7 +12,8 @@ sys.path.append(str(Path(__file__).absolute().parent.parent.parent))
 from src.parsed_paper import ParsedPaper
 from src.constants import FONT_DATA_DIR
 from src.acmlike.constants import PAGE_HEADER_FONT, PLACEHOLDER_SHORTAUTHORS_SUBSTRING,\
-    PLACEHOLDER_SHORTTILE_SUBSTRING, AUTHOR_BLOCK_FONT, SECTION_TITLE_FONT, COLUMN_SIZE, SUBSECTION_FONT_SIZE
+    PLACEHOLDER_SHORTTILE_SUBSTRING, AUTHOR_BLOCK_FONT, SECTION_TITLE_FONT, COLUMN_SIZE, \
+    SUBSECTION_FONT_SIZE, ABSTRACT_FONT
 from src.ruleset_info import RuleSetInfo
 
 class ACMLikeChecker():
@@ -40,8 +41,11 @@ class ACMLikeChecker():
         """
 
         paper.outline = extract_acm_paper_outline(paper)
+        if len(paper.outline[0]) == 0:
+            print("Paper with wrong font")
+            return {"acm_latex_template" : False}
         if paper.get_language() is None:
-            paper.update_language_from_outline(paper.get_outline())
+            paper.update_language_from_outline(paper.get_outline()[0])
 
         check_results = {} # For now, saves testing results in a dict structure.
         check_results = check_results | self._check_template_conformance(paper)
@@ -375,8 +379,11 @@ class ACMLikeChecker():
         """
 
         _, pos_outlines = paper.get_outline()
-        abstract_start = pos_outlines[0][1]#This is kinda risky, but it should be language inespecific;
-        abstract_end = pos_outlines[1][1]
+        try:
+            abstract_start = pos_outlines[0][1]#This is kinda risky, but it should be language inespecific;
+            abstract_end = pos_outlines[1][1]
+        except:
+            print(pos_outlines)
 
         abstract_lines = paper.get_all_pages()[0][abstract_start+2:abstract_end-1]
         last_lines = abstract_lines[-3:]
@@ -390,7 +397,7 @@ class ACMLikeChecker():
             if len(line_text) < 2:
                 continue
             if line_text[-1] == "\n" and line_text[-2] == "." and \
-                compute_line_length(line_text,font_family,font_size) < 0.9*COLUMN_SIZE: # This should help with false positives
+                compute_line_length(line_text,ABSTRACT_FONT,font_size) < 0.9*COLUMN_SIZE: # This should help with false positives
                 one_single_paragraph =  False
                 break
         
@@ -499,7 +506,7 @@ def extract_acm_paper_outline(paper: ParsedPaper) -> tuple[list[str],list[tuple[
             line = page[line_index]
             line_text = line[0]
             font_info = line[1]
-            if font_info is None or len(line_text) < 2:
+            if font_info is None or len(line_text) < 2 or "/BaseFont" not in font_info:
                 continue
             if font_info["/BaseFont"][8:] in SECTION_TITLE_FONT and line[2] > SUBSECTION_FONT_SIZE:
                 outline_titles.append(line_text)
