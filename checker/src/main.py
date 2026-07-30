@@ -56,7 +56,7 @@ def check_paper_batch(checker, batch_path):
         print("Checking paper", paper_path)
         
         binary_results, helpful_message = checker.check_and_compose_instructions(parsed_paper)
-        composite_results = {"paper": paper_path} | binary_results | {"message": helpful_message}
+        composite_results = {"paper": paper_path} | binary_results | {"_message": helpful_message, "_author_emails": parsed_paper.get_author_emails_as_str()}
         all_results.append(composite_results)
 
     save_batch_results("/data/"+batch_path+"_results.xlsx",all_results)

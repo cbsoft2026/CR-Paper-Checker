@@ -152,8 +152,6 @@ class ACMLikeChecker():
         """
         Checks whether the paper's authors are split into separate blocks,
         each with the author's email address.
-
-        TODO: Also parse and save authors from title page into Paper object.
         """
 
         partial_results = {
@@ -172,12 +170,12 @@ class ACMLikeChecker():
             for author_dict in authors_extracted:
                 if ',' in author_dict["name"] or 'anonymous' in author_dict["name"].lower():
                     partial_results["author_blocks"] = False
-                found_email = False
-                for info_line in author_dict["info"]:
-                    if re.match(r'[^@]+@[^@]+\.[^@]',info_line) is not None:
-                        found_email = True
-                if not found_email:
+
+                if author_dict["email"] is None:
                     partial_results["author_emails"] = False
+
+        if partial_results["author_blocks"]:
+            paper.update_author_emails(authors_extracted)        
 
         return partial_results
 
@@ -480,13 +478,19 @@ def extract_authors_from_page_lines(page_lines: list[tuple[str,dict,float]]) -> 
 
             authors_read.append({
                 "name" : new_name,
+                "email" : None,
                 "info" : []
             })
 
             line_index += 1 # Skipping newline here
             
             while page_lines[line_index][0] != "\n":
-                authors_read[-1]["info"].append(page_lines[line_index][0])
+                line_content = page_lines[line_index][0]
+                if re.match(r'[^@]+@[^@]+\.[^@]',line_content) is not None:
+                    authors_read[-1]["email"] = line_content.replace("\n","")
+                else:
+                    authors_read[-1]["info"].append(line_content)
+                
                 line_index += 1
             line_index -= 1
             

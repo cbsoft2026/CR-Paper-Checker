@@ -29,6 +29,7 @@ class ParsedPaper():
         new_parsed_paper.num_pages = len(reader.pages)
         new_parsed_paper.title = reader.metadata.title
         new_parsed_paper.creator = reader.metadata.creator
+        new_parsed_paper.author_emails = []
 
         parsed_outline = []
         for outline_item in reader.outline:
@@ -81,7 +82,16 @@ class ParsedPaper():
                     self.language = language
                     return language
         self.language = None
-        
+
+    def update_author_emails(self, authors_extracted):
+        """
+        Updates this paper's list of author emails.
+        """
+        self.author_emails = []
+        for author in authors_extracted:
+            if author["email"] is not None:
+                self.author_emails.append(author["email"])
+    
     def get_language(self) -> Enum | None:
         """
         Returns the language used in the paper's keywords.
@@ -123,3 +133,10 @@ class ParsedPaper():
         """
 
         return self.pages
+
+    def get_author_emails_as_str(self) -> list[str]:
+        """
+        Returns this paper's list of author emails.
+        """
+        resulting_str = ",".join(self.author_emails)
+        return resulting_str
