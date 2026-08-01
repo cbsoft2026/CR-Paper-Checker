@@ -77,7 +77,9 @@ def debug_paper_checking(checker, paper_path):
     checker.activate_debug_logs()
 
     parsed_paper = ParsedPaper.from_pdf("/data/" + paper_path)
-    
+
+    #print(parsed_paper.get_all_pages()[1][:10])
+
     print(checker.check_paper(parsed_paper))
 
 if __name__ == "__main__":

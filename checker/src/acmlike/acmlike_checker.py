@@ -110,7 +110,8 @@ class ACMLikeChecker():
             first_lines = paper.get_all_pages()[0][:25]
             compiled_on_review = False
             correct_fonts = True
-            if first_lines[1][0][0] == '1' and first_lines[2][0][0] == '2':
+            if len(first_lines[1][0]) >= 1 and len(first_lines[2][0]) >= 1 and\
+                first_lines[1][0][0] == '1' and first_lines[2][0][0] == '2':
                 compiled_on_review = True
 
             for line in first_lines:
@@ -523,7 +524,8 @@ def extract_acm_paper_outline(paper: ParsedPaper) -> tuple[list[str],list[tuple[
             if font_info["/BaseFont"][8:] in SECTION_TITLE_FONT and line[2] > SUBSECTION_FONT_SIZE:
                 outline_titles.append(line_text)
                 outline_pages.append((page_index,line_index))
-
+            #elif line[2] > SUBSECTION_FONT_SIZE:
+            #    print(line)
     return outline_titles,outline_pages
 
 def get_page_header_lines(paper: ParsedPaper, page_index: int) -> tuple[list[str],float]:
@@ -541,12 +543,11 @@ def get_page_header_lines(paper: ParsedPaper, page_index: int) -> tuple[list[str
         if font_info is None:
             continue
         
-        if font_info["/BaseFont"][8:] in PAGE_HEADER_FONT:
+        if font_info["/BaseFont"][8:] in PAGE_HEADER_FONT and len(line[0]) > 0:
             header_lines.append(line[0])
             size = line[2]
         else:
             break
-    
     return header_lines,size
 
 def compute_line_length(line: str, font_family: str, font_size: float) -> float:
