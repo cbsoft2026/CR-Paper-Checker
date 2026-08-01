@@ -141,7 +141,7 @@ class ACMLikeChecker():
         for line in first_page:
             if line[0] == "ACM Reference Format:":
                 partial_check_results["acm_ref_format"] = False
-            elif re.search(r"20\d{2}. ACM ISBN [A-Z\d]{3}-[A-Z\d]-[A-Z\d]{4}-[A-Z\d]{4}-[A-Z\d]\/\d{4}\/\d{2}",line[0]) is not None:
+            elif re.search(r"ACM ISBN [A-Z\d]{3}-[A-Z\d]-[A-Z\d]{4}-[A-Z\d]{4}-[A-Z\d]\/\d{4}\/\d{2}",line[0]) is not None:
                 partial_check_results["acm_footnote"] = False
             elif line[0] == "CCS Concepts":
                 partial_check_results["acm_ccs_concepts"] = False
