@@ -3,7 +3,7 @@ Houses the definition of constants specific to the ACMlike template checker.
 """
 
 #MAIN_FONT = "LinLibertineT"
-PAGE_HEADER_FONT = ("LinBiolinumT", "LinBiolinumO", "LinBiolinumO-Identity-H", "Inconsolatazi4-Regular", "CMSS8", "LMSans8-Regular")  #Including 'wrong' fonts;
+PAGE_HEADER_FONT = ("LinBiolinumT", "LinBiolinumTI", "LinBiolinumO", "LinBiolinumOI", "LinBiolinumO-Identity-H", "Inconsolatazi4-Regular", "CMSS8", "LMSans8-Regular")  #Including 'wrong' fonts;
 ABSTRACT_FONT = "LinLibertineT"
 AUTHOR_BLOCK_FONT = ("LinLibertineT", "LinLibertineO", "LinLibertineO-Identity-H", "CMR12", "LMRoman12-Regular")
 SECTION_TITLE_FONT = ("LinLibertineTB","LinLibertineOB", "LinLibertineOB-Identity-H","CMBX10", "LMRomanDemi10-Regular") #Including 'wrong' fonts
