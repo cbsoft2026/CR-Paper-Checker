@@ -101,7 +101,7 @@
         "portuguse_only_abstract" : "Se o artigo foi escrito em português, ele não pode conter um resumo escrito em inglês (Abstract).",
         "correctly_named_keywords" : "A listagem de Palavras-chave / Keywords deve ter este exato título e em title case (com apenas a primeira letra em caixa alta).",
         "references_section" : "A seção de Referências / References não pode estar numerada e deve ter este exato título em title case (com apenas a primeira letra em caixa alta).",
-        "correct_acks_title" : "Se o artigo incluir uma seção de Agradecimentos / Acknowledgements, ela deve ter este exato título em title case (com apenas a primeira letra em caixa alta).",
+        "correct_acks_title" : "Se o artigo incluir uma seção de Agradecimentos / Acknowledgments, ela deve ter este exato título em title case (com apenas a primeira letra em caixa alta).",
         "no_received_on_tags" : "O artigo não pode incluir valores do tipo received/revised/accepted at dates.",
         "acm_latex_template" : "O artigo deve usar o template ACM-like indicado na chamada da respectiva conferência.",
         "acm_not_review" : "Remova a numeração de linhas (modo review) da versão camera-ready do artigo.",
