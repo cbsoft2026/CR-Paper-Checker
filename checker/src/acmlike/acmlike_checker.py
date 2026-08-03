@@ -464,6 +464,10 @@ def extract_authors_from_page_lines(page_lines: list[tuple[str,dict,float]]) -> 
     while line_index < len(page_lines):
         this_line = page_lines[line_index]
         line_text = this_line[0]
+        if this_line[1] is None:
+            line_index += 1
+            continue
+        
         font_family = this_line[1]["/BaseFont"][8:]
 
         if font_family in AUTHOR_BLOCK_FONT:
@@ -543,7 +547,7 @@ def get_page_header_lines(paper: ParsedPaper, page_index: int) -> tuple[list[str
         if font_info is None:
             continue
         
-        if font_info["/BaseFont"][8:] in PAGE_HEADER_FONT and len(line[0]) > 0:
+        if font_info["/BaseFont"][8:] in PAGE_HEADER_FONT and len(line[0]) > 1:
             header_lines.append(line[0])
             size = line[2]
         else:

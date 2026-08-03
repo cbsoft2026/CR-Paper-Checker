@@ -4,21 +4,30 @@
         "conference_header": "SBES 2026, September 8–11, 2026, São Paulo, SP, Brazil",
         "common_track_misspells" : ["SBES 2026, September 8–12, 2026, São Paulo, SP, Brazil"],
         "content_page_limit": 10,
-        "total_page_limit": 12
+        "total_page_limit": 12,
+        "specific_rules": {
+            "correct_artifact_section": "A seção de Disponibilidade de Artefatos / Artifact Availability é obrigatória e deve ter este exato nome (de acordo com a linguagem do artigo)."
+        }
     },  
     {
         "name": "sbes_26_education",
         "conference_header": "SBES 2026, September 8–11, 2026, São Paulo, SP, Brazil",
         "common_track_misspells" : ["SBES 2026, September 8–12, 2026, São Paulo, SP, Brazil"],
         "content_page_limit": 10,
-        "total_page_limit": 12
+        "total_page_limit": 12,
+        "specific_rules": {
+            "correct_artifact_section": "A seção de Disponibilidade de Artefatos / Artifact Availability é obrigatória e deve ter este exato nome (de acordo com a linguagem do artigo)."
+        }
     },  
     {
         "name": "sbes_26_iier",
         "conference_header": "SBES 2026, September 8–11, 2026, São Paulo, SP, Brazil",
         "common_track_misspells" : ["SBES 2026, September 8–12, 2026, São Paulo, SP, Brazil"],
         "content_page_limit": 6,
-        "total_page_limit": 7
+        "total_page_limit": 7,
+        "specific_rules": {
+            "correct_artifact_section": "A seção de Disponibilidade de Artefatos / Artifact Availability é obrigatória e deve ter este exato nome (de acordo com a linguagem do artigo)."
+        }
     },  
     {
         "name": "sbes_26_tools",
@@ -39,12 +48,14 @@
     {
         "name": "sblp_26_full",
         "conference_header": "SBLP 2026, September 8–11, 2026, São Paulo, SP, Brazil",
+        "common_track_misspells" : ["SBLP 2026, September 8–12, 2026, São Paulo, SP, Brazil", "SBLP 2026, September 8–12, 2026, Sao Paulo, SP, Brazil", "SBLP 2026, September 8–11, 2026, Sao Paulo, SP, Brazil", "SBES 2026, September 8–11, 2026, São Paulo, SP, Brazil"],
         "content_page_limit": 9,
         "total_page_limit": 12
     },  
     {
         "name": "sblp_26_short",
         "conference_header": "SBLP 2026, September 8–11, 2026, São Paulo, SP, Brazil",
+        "common_track_misspells" : ["SBLP 2026, September 8–12, 2026, São Paulo, SP, Brazil"],
         "content_page_limit": 5,
         "total_page_limit": 8
     },  
