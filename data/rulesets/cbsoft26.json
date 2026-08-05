@@ -82,6 +82,66 @@
         "conference_header": "SAST 2026, September 8–11, 2026, São Paulo, SP, Brazil",
         "content_page_limit": 3,
         "total_page_limit": 3
+    },
+    {
+        "name": "ctic_26",
+        "conference_header": "CBSoft 2026, September 8–11, 2026, São Paulo, SP, Brazil",
+        "content_page_limit": 6,
+        "total_page_limit": 6
+    },
+    {
+        "name": "ctd_26",
+        "conference_header": "CBSoft 2026, September 8–11, 2026, São Paulo, SP, Brazil",
+        "content_page_limit": 8,
+        "total_page_limit": 10
+    },
+    {
+        "name": "se4fp_26",
+        "conference_header": "SE4FP 2026, September 8, 2026, São Paulo, SP, Brazil",
+        "content_page_limit": 5,
+        "total_page_limit": 6
+    },
+    {
+        "name": "se4games_26",
+        "conference_header": "SE4Games 2026, September 8, 2026, São Paulo, SP, Brazil",
+        "content_page_limit": 6,
+        "total_page_limit": 7
+    },
+    {
+        "name": "se4as_26",
+        "conference_header": "SE4AS 2026, September 8, 2026, São Paulo, SP, Brazil",
+        "content_page_limit": 6,
+        "total_page_limit": 6
+    },
+    {
+        "name": "wqse_26",
+        "conference_header": "WQSE 2026, September 8, 2026, São Paulo, SP, Brazil",
+        "content_page_limit": 6,
+        "total_page_limit": 7
+    },
+    {
+        "name": "aisecdev_26",
+        "conference_header": "AISecDev 2026, September 8, 2026, São Paulo, SP, Brazil",
+        "content_page_limit": 4,
+        "total_page_limit": 4
+    },
+    {
+        "name": "vem_26",
+        "conference_header": "VEM 2026, September 11, 2026, São Paulo, SP, Brazil",
+        "content_page_limit": 6,
+        "total_page_limit": 7
+    },
+    {
+        "name": "ise_26",
+        "conference_header": "ISE 2026, September 11, 2026, São Paulo, SP, Brazil",
+        "content_page_limit": 6,
+        "total_page_limit": 6
+    },
+    {
+        "name": "wbots_26",
+        "conference_header": "WBots 2026, September 11, 2026, São Paulo, SP, Brazil",
+        "content_page_limit": 6,
+        "total_page_limit": 7
     }],
 
     "rules": {
