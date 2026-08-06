@@ -4,30 +4,21 @@
         "conference_header": "SBES 2026, September 8–11, 2026, São Paulo, SP, Brazil",
         "common_track_misspells" : ["SBES 2026, September 8–12, 2026, São Paulo, SP, Brazil"],
         "content_page_limit": 10,
-        "total_page_limit": 12,
-        "specific_rules": {
-            "correct_artifact_section": "A seção de Disponibilidade de Artefatos / Artifact Availability é obrigatória e deve ter este exato nome (de acordo com a linguagem do artigo)."
-        }
+        "total_page_limit": 12
     },  
     {
         "name": "sbes_26_education",
         "conference_header": "SBES 2026, September 8–11, 2026, São Paulo, SP, Brazil",
         "common_track_misspells" : ["SBES 2026, September 8–12, 2026, São Paulo, SP, Brazil"],
         "content_page_limit": 10,
-        "total_page_limit": 12,
-        "specific_rules": {
-            "correct_artifact_section": "A seção de Disponibilidade de Artefatos / Artifact Availability é obrigatória e deve ter este exato nome (de acordo com a linguagem do artigo)."
-        }
+        "total_page_limit": 12
     },  
     {
         "name": "sbes_26_iier",
         "conference_header": "SBES 2026, September 8–11, 2026, São Paulo, SP, Brazil",
         "common_track_misspells" : ["SBES 2026, September 8–12, 2026, São Paulo, SP, Brazil"],
         "content_page_limit": 6,
-        "total_page_limit": 7,
-        "specific_rules": {
-            "correct_artifact_section": "A seção de Disponibilidade de Artefatos / Artifact Availability é obrigatória e deve ter este exato nome (de acordo com a linguagem do artigo)."
-        }
+        "total_page_limit": 7
     },  
     {
         "name": "sbes_26_tools",
@@ -155,6 +146,7 @@
         "author_blocks" : "Cada autor do artigo deve corresponder a um bloco diferente na capa do artigo.",
         "author_emails" : "O bloco de cada autor do artigo deve conter o seu endereço de email.",
         "all_sections_lowercase" : "O nome de todas as seções deve seguir title case, com apenas a primeira letra de cada palavra em caixa alta.",
+        "correct_artifact_section": "A seção de Disponibilidade de Artefatos / Artifact Availability é obrigatória e deve ter este exato nome (de acordo com a linguagem do artigo).",
         "artifact_sec_pos" : "A seção de Disponibilidade de Artefatos deve estar depois da conclusão e antes dos agradecimentos, apêndices e referências.",
         "correctly_named_abstract": "O artigo deve conter uma seção de Resumo / Abstract com o nome correto e em title case (com apenas a primeira letra em caixa alta).",
         "one_paragraph_on_abstract" : "O resumo do artigo deve conter um só parágrafo.",
