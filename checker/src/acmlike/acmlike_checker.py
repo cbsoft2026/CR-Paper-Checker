@@ -335,7 +335,7 @@ class ACMLikeChecker():
                     outline_results["numbered_sections_lowercase"] = False
                     outline_results["all_sections_lowercase"] = False
 
-                if not_numbered == paper_language.ACKS.value or \
+                if not_numbered in paper_language.ACKS.value or \
                     not_numbered in paper_language.WRONG_ACKS.value: 
 
                     outline_results["correct_acks_title"] = False
@@ -348,7 +348,7 @@ class ACMLikeChecker():
                 if not english_written and item.lower() == "abstract":
                     outline_results["portuguse_only_abstract"] = False
             
-                if acks_index == -1 and item == paper_language.ACKS.value:
+                if acks_index == -1 and item in paper_language.ACKS.value:
                     acks_index = item_index
                 elif acks_index == -1 and item in paper_language.WRONG_ACKS.value:
                     outline_results["correct_acks_title"] = False
