@@ -8,7 +8,7 @@ ABSTRACT_FONT = "LinLibertineT"
 AUTHOR_BLOCK_FONT = ("LinLibertineT", "LinLibertineO", "LinLibertineO-Identity-H", "CMR12", "LMRoman12-Regular")
 SECTION_TITLE_FONT = ("LinLibertineTB","LinLibertineOB", "LinLibertineOB-Identity-H","CMBX10", "LMRomanDemi10-Regular") #Including 'wrong' fonts
 #TABLE_CAPTION_FONT = "LinLibertineTB"
-CORRECT_TEMPLATE_FONT = ("LinBiolinumT", "LinBiolinumO", "LinLibertineT", "LinLibertineO", "LinLibertineO-Identity-H", "LinLibertineTB", "LinLibertineOB", "LinLibertineOB-Identity-H" , "LinLibertineTI", "LinLibertineOI", "LibertineMathMI", "Inconsolatazi4-Regular") # This last two are used in math envs and \verb|| envs.
+CORRECT_TEMPLATE_FONT = ("LinBiolinumT", "LinBiolinumO", "LinLibertineT", "LinLibertineO", "LinLibertineO-Identity-H", "LinLibertineTB", "LinLibertineOB", "LinLibertineOB-Identity-H", "LinLibertineTI", "LinLibertineOI", "LinLibertineOI-Identity-H", "LibertineMathMI", "Inconsolatazi4-Regular") # This last two are used in math envs and \verb|| envs.
 
 PLACEHOLDER_SHORTAUTHORS_SUBSTRING = "Surname"
 PLACEHOLDER_SHORTTILE_SUBSTRING = "Is Hope"
